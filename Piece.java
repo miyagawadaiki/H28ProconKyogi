@@ -2,18 +2,27 @@ import java.util.*;
 
 public class Piece {
     int num;
-    Vector[] vectors;
+    double theta;
+    Coord c;
+    Coord[] coords;
+//    Vector[] vectors;
 
     public Piece(int num) {
         this.num = num;
-        vectors = new Vector[num];
-        for(Vector v : vectors)
-            v = new Vector();
+        theta = 0.0;
+        c = new Coord();
+        coords = new Coord[num];
+//        vectors = new Vector[num];
+//        for(Vector v : vectors)
+//            v = new Vector();
+        for(Coord c : coords)
+            c = new Coord();
     }
 
     public Piece(Piece p, double theta) {
         this(p);
-        rotate(theta);
+        this.theta = theta;
+//        rotate(theta);
 //        System.out.printf("turn\n%f\n%s\n",theta,this);
     }
 
@@ -32,55 +41,73 @@ public class Piece {
         while(true) {
             if(pi == p1.getBackIdx(p1_idx)) break;
 //            System.out.printf("p1_%d:%s\n",pi,p1.vectors[pi]);
-            this.vectors[index++] = p1.vectors[pi];
+//            this.vectors[index++] = p1.vectors[pi];
+            set(index++, p1.get(pi));
             pi = (pi+1)%p1.num;
         }
 //        System.out.printf("p12:%s\n",p12);
 
         if(flag) {
-            this.vectors[index++] = p12;
+//            this.vectors[index++] = p12;
+            set(index++, p12);
         } else {
-            this.vectors[index++] = p1b;
-            this.vectors[index++] = p2n;
+//            this.vectors[index++] = p1b;
+//            this.vectors[index++] = p2n;
+            set(index++, p1b);
+            set(index++, p2n);
         }
         pi = (p2_idx+2)%p2.num;
         while(true) {
             if(pi == p2.getBackIdx(p2_idx)) break;
 //            System.out.printf("p2_%d:%s\n",pi,p1.vectors[pi]);
-            this.vectors[index++] = p2.vectors[pi];
+//            this.vectors[index++] = p2.vectors[pi];
+            set(index++, p2.get(pi));
             pi = (pi+1)%p2.num;
         }
 //        System.out.printf("p21:%s\n",p21);
         if(flag) {
-            this.vectors[index] = p21;
+//            this.vectors[index] = p21;
+            set(index++, p21);
         } else {
-            this.vectors[index++] = p2b;
-            this.vectors[index++] = p1n;
+//            this.vectors[index++] = p2b;
+//            this.vectors[index++] = p1n;
+            set(index++, p2b);
+            set(index++, p1n);
         }
     }
 
     public Piece(Piece copy) {
         this(copy.num);
+        this.theta = copy.theta;
+        this.c = copy.c.clone();
         for(int i=0;i<num;i++)
-            this.vectors[i] = copy.vectors[i].clone();
+//            this.vectors[i] = copy.vectors[i].clone();
+            this.coords[i] = copy.coords[i].clone();
     }
 
     public Piece clone() {
         return new Piece(this);
     }
 
+    void set(int n, Vector v) {
+        coords[n] = new Coord(coords[getBackIdx(n)], v);
+    }
+
     Vector get(int n) {
         if(n > num)
             throw new IllegalArgumentException("no such vector in this Piece : \n" + this.toString() + "\n");
-        return vectors[n];
+//        return vectors[n];
+        return new Vector(new Vector(coords[n],coords[getNextIdx(n)]), theta);
     }
 
     Vector getBack(int n) {
-        return vectors[getBackIdx(n)];
+//        return vectors[getBackIdx(n)];
+        return get(getBackIdx(n));
     }
 
     Vector getNext(int n) {
-        return vectors[getNextIdx(n)];
+//        return vectors[getNextIdx(n)];
+        return get(getNextIdx(n));
     }
 
     int getBackIdx(int n) {
@@ -92,6 +119,13 @@ public class Piece {
     }
 
     void read(Scanner stdIn) {
+        for(int i=0;i<num;i++) {
+            coords[i] = new Coord(stdIn.nextDouble(), stdIn.nextDouble());
+        }
+    }
+
+/*
+    void read(Scanner stdIn) {
         Coord first = new Coord(stdIn.nextDouble(), stdIn.nextDouble());
         Coord front = first;
         int i;
@@ -102,21 +136,28 @@ public class Piece {
         }
         vectors[i] = new Vector(front, first);
     }
+*/
 
+/*
     void rotate(double theta) {
         for(int i=0;i<num;i++)
             vectors[i] = new Vector(vectors[i], theta);
     }
+*/
 
+/*
     void flip() {
         for(Vector v : vectors)
             v = new Vector(v,-1.0,1.0);
     }
+*/
 
     double totalLength() {
         double s = 0;
-        for(Vector v : vectors)
-            s += v.length;
+//        for(Vector v : vectors)
+//            s += v.length;
+        for(int i=0;i<num;i++)
+            s += get(i).length;
         return s;
     }
 
@@ -128,7 +169,8 @@ public class Piece {
             for(int i=0;i<this.num;i++) {
                 boolean flg = true;
                 for(int j=0;j<p.num;j++) {
-                    if(!Tool.hasAccuracy(this.vectors[(i+j)%this.num].length, p.vectors[j].length)) {
+//                    if(!Tool.hasAccuracy(this.vectors[(i+j)%this.num].length, p.vectors[j].length)) {
+                    if(!Tool.hasAccuracy(get((i+j)%num).length, p.get(j).length)) {
                         flg = false;
                         break;
                     }
@@ -141,9 +183,11 @@ public class Piece {
 
     public String toString() {
         String s = "";
-        for(Vector i : vectors) {
-            s += i.toString() + " ";
-        }
+//        for(Vector i : vectors) {
+//            s += i.toString() + " ";
+//        }
+        for(int i=0;i<num;i++)
+            s += get(i).toString() + " ";
         return s;
     }
 }

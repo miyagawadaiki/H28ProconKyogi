@@ -26,8 +26,8 @@ public class Main {
                         for(int l=0;l<now.data.get(j).num;l++) {
                             Piece p = now.data.get(i);
                             Piece q = now.data.get(j);
-                            Vector a = p.vectors[k];
-                            Vector b = q.vectors[l];
+                            Vector a = p.get(k);
+                            Vector b = q.get(l);
                             Piece c = new Piece(q,Tool.calcLinalizeAngle(a,b));
                             if(Tool.checkFitness(p,c,k,l)) {
 //                            if(Tool.hasAccuracy(0.0, a.length - b.length)) {
