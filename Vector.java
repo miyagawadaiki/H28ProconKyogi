@@ -55,7 +55,7 @@ public class Vector {
 
     public String toString() {
         String s = "";
-        s += String.format("(%10f, %10f)", dx, dy);
+        s += String.format("(%10f,%10f)", dx, dy);
         return s;
     }
 }

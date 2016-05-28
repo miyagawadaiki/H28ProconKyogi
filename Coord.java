@@ -3,7 +3,8 @@ public class Coord {
     double y;
 
     public Coord() {
-        this(0.0,0.0);
+        this.x = 0.0;
+        this.y = 0.0;
     }
 
     public Coord(Coord copy) {
@@ -21,5 +22,9 @@ public class Coord {
 
     public Coord clone() {
         return new Coord(this);
+    }
+
+    public String toString() {
+        return String.format("(%10f,%10f)", x, y);
     }
 }
