@@ -5,6 +5,7 @@ public class Piece {
     double theta;
     Coord c;
     Coord[] coords;
+    int dent_cnt;
 //    Vector[] vectors;
 
     public Piece(int num) {
@@ -17,11 +18,12 @@ public class Piece {
 //            v = new Vector();
         for(int i=0;i<num;i++)
             coords[i] = new Coord();
+        dent_cnt = 0;
     }
 
     public Piece(Piece p, double theta) {
         this(p);
-        this.theta = theta;
+        this.theta += theta;
 //        rotate(theta);
 //        System.out.printf("turn\n%f\n%s\n",theta,this);
     }
@@ -127,6 +129,7 @@ public class Piece {
         for(int i=0;i<num;i++) {
             coords[i] = new Coord(stdIn.nextDouble(), stdIn.nextDouble());
         }
+        countUpDent();
     }
 
 /*
@@ -143,12 +146,11 @@ public class Piece {
     }
 */
 
-/*
+
     void rotate(double theta) {
-        for(int i=0;i<num;i++)
-            vectors[i] = new Vector(vectors[i], theta);
+        this.theta += theta;
     }
-*/
+
 
 /*
     void flip() {
@@ -164,6 +166,14 @@ public class Piece {
         for(int i=0;i<num;i++)
             s += get(i).length;
         return s;
+    }
+
+    void countUpDent() {
+        Vector a,b = get(0);
+        for(int i=0;i<num-1;i++) {
+            a = b; b = get(i+1);
+
+        }
     }
 
     boolean equals(Piece p) {

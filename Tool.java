@@ -42,6 +42,7 @@ public class Tool {
         Vector p_cv = p.get(p_c), x_cv = x.get(x_c);
         Vector p_bv = p.getBack(p_c), x_bv = x.getBack(x_c);
         Vector p_nv = p.getNext(p_c), x_nv = x.getNext(x_c);
+        System.out.printf("%s %s\n", p_cv, x_cv);
 
         if(hasAccuracy(p_cv.length,x_cv.length) == false)
             return false;

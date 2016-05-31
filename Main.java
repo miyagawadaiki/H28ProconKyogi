@@ -29,12 +29,14 @@ public class Main {
                             Vector a = p.get(k);
                             Vector b = q.get(l);
                             Piece c = new Piece(q,Tool.calcLinalizeAngle(a,b));
+//                            q.rotate(Tool.calcLinalizeAngle(a,b));
                             if(Tool.checkFitness(p,c,k,l)) {
+//                            if(Tool.checkFitness(p,q,k,l)) {
 //                            if(Tool.hasAccuracy(0.0, a.length - b.length)) {
                                 Solver brunch = now.clone();
                                 brunch.data.remove(i);
                                 brunch.data.remove(j-1);
-                                brunch.data.add(Tool.fuse(p,c,k,l));
+                                brunch.data.add(Tool.fuse(p,q,k,l));
 //                                brunch.data.add(Tool.join(p,c,k,l));
                                 temp.push(brunch);
                             }
