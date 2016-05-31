@@ -36,7 +36,7 @@ public class Main {
                                 Solver brunch = now.clone();
                                 brunch.data.remove(i);
                                 brunch.data.remove(j-1);
-                                brunch.data.add(Tool.fuse(p,q,k,l));
+                                brunch.data.add(Tool.fuse(p,c,k,l));
 //                                brunch.data.add(Tool.join(p,c,k,l));
                                 temp.push(brunch);
                             }

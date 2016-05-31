@@ -42,16 +42,20 @@ public class Tool {
         Vector p_cv = p.get(p_c), x_cv = x.get(x_c);
         Vector p_bv = p.getBack(p_c), x_bv = x.getBack(x_c);
         Vector p_nv = p.getNext(p_c), x_nv = x.getNext(x_c);
-        System.out.printf("%s %s\n", p_cv, x_cv);
 
         if(hasAccuracy(p_cv.length,x_cv.length) == false)
             return false;
         else {
+//            System.out.printf("%s %s %s %s %s %s\n", p_cv, x_cv, p_bv, x_nv, p_nv, x_bv);
             if(hasAccuracy(calcRadAngle(p_bv,x_nv),0.0) &&
-               hasAccuracy(calcRadAngle(p_nv,x_bv),0.0))
+               hasAccuracy(calcRadAngle(p_nv,x_bv),0.0)) {
 //            if(isParallel(p_bv,x_nv) && isParallel(p_nv,x_bv))
+                System.out.println("match!");
                 return true;
-            else return false;
+            }
+            else {
+                return false;
+            }
         }
     }
 

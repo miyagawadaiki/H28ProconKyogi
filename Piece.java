@@ -39,6 +39,8 @@ public class Piece {
         Vector p12 = new Vector(p1b,p2n);
         Vector p21 = new Vector(p2b, p1n);
 
+        System.out.printf("%s %s %s %s\n%s %s\n", p1b, p2n, p2b, p1n, p12, p21);
+
         int index = 0;
         int pi = (p1_idx+2)%p1.num;
         while(true) {
