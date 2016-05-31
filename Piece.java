@@ -6,6 +6,7 @@ public class Piece {
     Coord c;
     Coord[] coords;
     int dent_cnt;
+    int[] dents;
 //    Vector[] vectors;
 
     public Piece(int num) {
@@ -19,12 +20,12 @@ public class Piece {
         for(int i=0;i<num;i++)
             coords[i] = new Coord();
         dent_cnt = 0;
+        dents = new int[32];
     }
 
     public Piece(Piece p, double theta) {
         this(p);
-        this.theta += theta;
-//        rotate(theta);
+        rotate(theta);
 //        System.out.printf("turn\n%f\n%s\n",theta,this);
     }
 
@@ -39,7 +40,7 @@ public class Piece {
         Vector p12 = new Vector(p1b,p2n);
         Vector p21 = new Vector(p2b, p1n);
 
-        System.out.printf("%s %s %s %s\n%s %s\n", p1b, p2n, p2b, p1n, p12, p21);
+//        System.out.printf("%s %s %s %s\n%s %s\n", p1b, p2n, p2b, p1n, p12, p21);
 
         int index = 0;
         int pi = (p1_idx+2)%p1.num;
@@ -171,10 +172,13 @@ public class Piece {
     }
 
     void countUpDent() {
-        Vector a,b = get(0);
+        Vector v1,v2 = get(0);
         for(int i=0;i<num-1;i++) {
-            a = b; b = get(i+1);
-
+            v1 = v2; v2 = get(i+1);
+            double a1 = Tool.calcTheta(v1), a2 = Tool.calcTheta(v2);
+            if(a1 - a2 < 0) {
+                dents[dent_cnt++] = i;
+            }
         }
     }
 
@@ -200,6 +204,7 @@ public class Piece {
 
     public String toString() {
         String s = "";
+        s += String.format("[%2d:%2d:%4f] ", num, dent_cnt, theta);
 //        for(Vector i : vectors) {
 //            s += i.toString() + " ";
 //        }

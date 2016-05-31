@@ -50,7 +50,7 @@ public class Tool {
             if(hasAccuracy(calcRadAngle(p_bv,x_nv),0.0) &&
                hasAccuracy(calcRadAngle(p_nv,x_bv),0.0)) {
 //            if(isParallel(p_bv,x_nv) && isParallel(p_nv,x_bv))
-                System.out.println("match!");
+//                System.out.println("match!");
                 return true;
             }
             else {
