@@ -11,7 +11,7 @@ public class Tool {
 
         //x軸からの角度を返す
     static double calcTheta(Vector v) {
-        double d_v = calcRadAngle(v,new Vector(0.0,1.0));
+        double d_v = calcRadAngle(v,new Vector(1.0,0.0));
         if(v.dy >= 0) return d_v;
         else return Math.PI * 2 - d_v;
     }
@@ -26,6 +26,25 @@ public class Tool {
         double x_a = calcTheta(x);
         if(v_a > x_a) return d_a - Math.PI;
         else return Math.PI - d_a;
+    }
+
+    static double calcAngle(Vector v1, Vector v2) {
+        double t12 = calcRadAngle(v1,v2);
+        double t1 = calcTheta(v1);
+        double t2 = calcTheta(v2);
+        double theta = t2-t1;
+//        if(t2 - t1 <= Math.PI) return t2-t1;
+//        else return t1-t2;
+        return calcDTheta(theta);
+    }
+
+    static double calcDTheta(Vector v) {
+        double theta = calcTheta(v);
+        return calcDTheta(theta);
+    }
+
+    static double calcDTheta(double theta) {
+        return theta - (int)(theta / Math.PI) * 2 * Math.PI;
     }
 
         //真値と誤差を比較して許容範囲に入っているか調べる

@@ -90,6 +90,8 @@ public class Piece {
         for(int i=0;i<num;i++)
 //            this.vectors[i] = copy.vectors[i].clone();
             this.coords[i] = copy.coords[i].clone();
+        this.dent_cnt = copy.dent_cnt;
+        this.dents = copy.dents.clone();
     }
 
     public Piece clone() {
@@ -175,8 +177,8 @@ public class Piece {
         Vector v1,v2 = get(0);
         for(int i=0;i<num-1;i++) {
             v1 = v2; v2 = get(i+1);
-            double a1 = Tool.calcTheta(v1), a2 = Tool.calcTheta(v2);
-            if(a1 - a2 < 0) {
+//            System.out.println(Tool.calcAngle(v1,v2));
+            if(Tool.calcAngle(v1,v2) < 0) {
                 dents[dent_cnt++] = i;
             }
         }
