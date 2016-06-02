@@ -81,6 +81,7 @@ public class Piece {
             this.set(index++, p2b);
             this.set(index++, p1n);
         }
+        countUpDent();
     }
 
     public Piece(Piece copy) {
@@ -173,10 +174,11 @@ public class Piece {
         return s;
     }
 
+        //TODO
     void countUpDent() {
         Vector v1,v2 = get(0);
-        for(int i=0;i<num-1;i++) {
-            v1 = v2; v2 = get(i+1);
+        for(int i=0;i<num;i++) {
+            v1 = v2; v2 = getNext(i);
 //            System.out.println(Tool.calcAngle(v1,v2));
             if(Tool.calcAngle(v1,v2) < 0) {
                 dents[dent_cnt++] = i;
