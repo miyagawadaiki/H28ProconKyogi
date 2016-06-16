@@ -5,6 +5,7 @@ public class Frame {
     Coord[] coords;
 //    Vector[] vectors;
     double total_length;
+    double max;
 
     public Frame(int num) {
         this.num = num;
@@ -17,6 +18,7 @@ public class Frame {
         for(int i=0;i<num;i++)
 //            this.vectors[i] = copy.vectors[i].clone();
             this.coords[i] = copy.coords[i].clone();
+        this.max = copy.max;
     }
 
     public Frame clone() {
@@ -27,6 +29,7 @@ public class Frame {
         for(int i=0;i<num;i++) {
             coords[i] = new Coord(stdIn.nextDouble(), stdIn.nextDouble());
         }
+        calcMax();
     }
 
 /*
@@ -64,6 +67,15 @@ public class Frame {
         for(int i=0;i<num;i++)
             s += get(i).length;
         return s;
+    }
+
+    void calcMax() {
+        Vector mx = new Vector(0,0);
+        for(int i=0;i<coords.length;i++) {
+            if(get(i).length > mx.length)
+                mx = get(i);
+        }
+        max = mx.length;
     }
 
     boolean equals(Piece p) {

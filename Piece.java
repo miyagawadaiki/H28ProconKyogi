@@ -7,6 +7,7 @@ public class Piece {
     Coord[] coords;
     int dent_cnt;
     int[] dents;
+    double max;
 //    Vector[] vectors;
 
     public Piece(int num) {
@@ -21,6 +22,7 @@ public class Piece {
             coords[i] = new Coord();
         dent_cnt = 0;
         dents = new int[32];
+        max = 100000000;
     }
 
     public Piece(Piece p, double theta) {
@@ -82,6 +84,7 @@ public class Piece {
             this.set(index++, p1n);
         }
         countUpDent();
+        calcMax();
     }
 
     public Piece(Piece copy) {
@@ -93,6 +96,7 @@ public class Piece {
             this.coords[i] = copy.coords[i].clone();
         this.dent_cnt = copy.dent_cnt;
         this.dents = copy.dents.clone();
+        this.max = copy.max;
     }
 
     public Piece clone() {
@@ -136,6 +140,7 @@ public class Piece {
             coords[i] = new Coord(stdIn.nextDouble(), stdIn.nextDouble());
         }
         countUpDent();
+        calcMax();
     }
 
 /*
@@ -184,6 +189,15 @@ public class Piece {
                 dents[dent_cnt++] = i;
             }
         }
+    }
+
+    void calcMax() {
+        Vector mx = new Vector(0,0);
+        for(int i=0;i<coords.length;i++) {
+            if(get(i).length > mx.length)
+                mx = get(i);
+        }
+        max = mx.length;
     }
 
     boolean equals(Piece p) {

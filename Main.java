@@ -9,11 +9,13 @@ public class Main {
         Stack<Solver> temp = new Stack<Solver>();
         temp.push(first);
         ArrayList<Solver> comb_list = new ArrayList<Solver>();
+        long count = 1L;
 
         System.out.println(first);
 
         while(temp.size() > 0) {
             Solver now = temp.pop();
+            System.out.printf("%4d %19d\n", temp.size(), count++);
             System.out.println(now);
             if(now.isFinished()) {
                 System.out.println("finished!!!!!!!!!!!!!!!!!");
@@ -30,7 +32,8 @@ public class Main {
                             Vector b = q.get(l);
                             Piece c = new Piece(q,Tool.calcLinalizeAngle(a,b));
 //                            q.rotate(Tool.calcLinalizeAngle(a,b));
-                            if(Tool.checkFitness(p,c,k,l)) {
+                            if(Tool.checkFitness(p,c,k,l) &&
+                              (Tool.fuse(p,c,k,l).max <= now.frame.max)) {
 //                            if(Tool.checkFitness(p,q,k,l)) {
 //                            if(Tool.hasAccuracy(0.0, a.length - b.length)) {
                                 Solver brunch = now.clone();
@@ -44,7 +47,7 @@ public class Main {
                     }
                 }
             }
-            comb_list.add(now);
+//            comb_list.add(now);
         }
         System.out.println("Not Found");
 
