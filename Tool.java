@@ -1,5 +1,5 @@
 public class Tool {
-    static double thre = 0.05;
+    static double thre = 0.02;
 
         //2つのベクトル間の角度をラジアンで返す
     static double calcRadAngle(Vector a, Vector b) {

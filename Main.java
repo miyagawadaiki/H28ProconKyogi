@@ -4,6 +4,26 @@ public class Main {
 
 ///*
     public static void main(String[] args) {
+        solve();
+    }
+
+    public static void solve_() {
+        Solver first = new Solver();
+        first.read();
+        Stack<Solver> temp = new Stack<Solver>();
+        temp.push(first);
+
+        System.out.println(first);
+/*
+        while(temp.size() > 0) {
+            Solver now = temp.pop();
+            System.out.printf("%4d %19d\n", temp.size(), count++);
+            System.out.println(now);
+        }
+*/
+    }
+
+    public static void solve() {
         Solver first = new Solver();
         first.read();
         Stack<Solver> temp = new Stack<Solver>();
@@ -16,26 +36,32 @@ public class Main {
         while(temp.size() > 0) {
             Solver now = temp.pop();
             System.out.printf("%4d %19d\n", temp.size(), count++);
-            System.out.println(now);
+//            System.out.println(now);
             if(now.isFinished()) {
                 System.out.println("finished!!!!!!!!!!!!!!!!!");
                 System.out.println(now);
                 System.exit(1);
             }
             for(int i=0;i<now.data.size();i++) {
+                System.out.println(now.data.get(i));
                 for(int j=i+1;j<now.data.size();j++) {
+                    System.out.println("\t"+now.data.get(j));
                     for(int k=0;k<now.data.get(i).num;k++) {
+                        System.out.println("\t\t"+now.data.get(i).get(k));
                         for(int l=0;l<now.data.get(j).num;l++) {
+                            System.out.println("\t\t\t"+now.data.get(j).get(l));
                             Piece p = now.data.get(i);
                             Piece q = now.data.get(j);
                             Vector a = p.get(k);
                             Vector b = q.get(l);
                             Piece c = new Piece(q,Tool.calcLinalizeAngle(a,b));
+//                            System.out.println(c);
 //                            q.rotate(Tool.calcLinalizeAngle(a,b));
-                            if(Tool.checkFitness(p,c,k,l) &&
-                              (Tool.fuse(p,c,k,l).max <= now.frame.max)) {
-//                            if(Tool.checkFitness(p,q,k,l)) {
+//                            if(Tool.checkFitness(p,c,k,l) &&
+//                              (Tool.fuse(p,c,k,l).max <= now.frame.max)) {
+                            if(Tool.checkFitness(p,q,k,l)) {
 //                            if(Tool.hasAccuracy(0.0, a.length - b.length)) {
+//                                System.out.println("Yattaze");
                                 Solver brunch = now.clone();
                                 brunch.data.remove(i);
                                 brunch.data.remove(j-1);
