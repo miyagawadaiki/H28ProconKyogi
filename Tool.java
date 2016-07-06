@@ -1,12 +1,15 @@
 public class Tool {
-    static double thre = 0.02;
+    static double thre = 0.05;
 
         //2つのベクトル間の角度をラジアンで返す
     static double calcRadAngle(Vector a, Vector b) {
 //        return Math.acos((a.dx * b.dx + a.dy * b.dy) / (a.length * b.length));
         double c = (a.dx * b.dx + a.dy * b.dy) / (a.length * b.length);
 //        System.out.println(c);
-        return Math.acos(c);
+        c = correctDouble(c);
+//        System.out.println(c);
+        if(c > 1 && c - 1 < 0.0001) c = 1.0;
+        return correctDouble(Math.acos(c));
     }
 
         //x軸からの角度を返す
@@ -24,6 +27,7 @@ public class Tool {
         double d_a = calcRadAngle(v,x);
         double v_a = calcTheta(v);
         double x_a = calcTheta(x);
+//        System.out.println(d_a + "\t" + v_a + "\t" + x_a);
         if(v_a > x_a) return d_a - Math.PI;
         else return Math.PI - d_a;
     }
@@ -49,12 +53,13 @@ public class Tool {
 
         //真値と誤差を比較して許容範囲に入っているか調べる
     static boolean hasAccuracy(double m, double m_t) {
+//        if(m_t == 0.0) m_t = 0.00001;
         return Math.abs(m - m_t) < thre;
     }
 
         //2つのベクトルが並行であるかどうかを返す
     static boolean isParallel(Vector a, Vector b) {
-        return (Math.abs(a.dx * b.dy) - Math.abs(a.dy * b.dx)) == 0;
+        return hasAccuracy(Math.abs(a.dx * b.dy) - Math.abs(a.dy * b.dx),0.0);
     }
 
     static boolean checkFitness(Piece p, Piece x, int p_c, int x_c) {
@@ -66,9 +71,12 @@ public class Tool {
             return false;
         else {
 //            System.out.printf("%s %s %s %s %s %s\n", p_cv, x_cv, p_bv, x_nv, p_nv, x_bv);
-            if(hasAccuracy(calcRadAngle(p_bv,x_nv),0.0) &&
-               hasAccuracy(calcRadAngle(p_nv,x_bv),0.0)) {
-//            if(isParallel(p_bv,x_nv) && isParallel(p_nv,x_bv))
+            double tmp1 = calcRadAngle(p_bv,x_nv),
+                   tmp2 = calcRadAngle(p_nv,x_bv);
+//            System.out.println(tmp1 + " " + tmp2);
+            if(hasAccuracy(tmp1,0.0) &&
+               hasAccuracy(tmp2,0.0)) {
+//            if(isParallel(p_bv,x_nv) && isParallel(p_nv,x_bv)) {
 //                System.out.println("match!");
                 return true;
             }
@@ -76,6 +84,13 @@ public class Tool {
                 return false;
             }
         }
+    }
+
+    static double correctDouble(double d) {
+            // 通常doubleの小数点以下桁数は14 現在：13
+        double tmp = d + 0.0000000000005;
+        long hoge = (long)(tmp * 1000000000000L);
+        return hoge / 1000000000000.0;
     }
 
     static Piece fuse(Piece p1, Piece p2, int p1_idx, int p2_idx) {

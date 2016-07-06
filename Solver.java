@@ -12,7 +12,7 @@ public class Solver {
     public Solver(Solver copy) {
         this();
         for(Piece p : copy.data)
-            this.data.add(p);
+            this.data.add(p.clone());
         this.frame = copy.frame.clone();
     }
 
@@ -20,7 +20,12 @@ public class Solver {
         return new Solver(this);
     }
 
-        //ファイルorコンソールから読み込む
+    //TODO
+    public double eval(Piece p) {
+        return 0.0;
+    }
+
+    // ファイルorコンソールから読み込む
     public void read() {
         Scanner stdIn  = new Scanner(System.in);
 
