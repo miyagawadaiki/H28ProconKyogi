@@ -1,5 +1,5 @@
 public class Tool {
-    static double thre = 0.05;
+    static double thre = 0.1;
 
         //2つのベクトル間の角度をラジアンで返す
     static double calcRadAngle(Vector a, Vector b) {
@@ -8,7 +8,7 @@ public class Tool {
 //        System.out.println(c);
         c = correctDouble(c);
 //        System.out.println(c);
-        if(c > 1 && c - 1 < 0.0001) c = 1.0;
+//        if(c > 1 && c - 1 < 0.0001) c = 1.0;
         return correctDouble(Math.acos(c));
     }
 
@@ -53,8 +53,12 @@ public class Tool {
 
         //真値と誤差を比較して許容範囲に入っているか調べる
     static boolean hasAccuracy(double m, double m_t) {
-//        if(m_t == 0.0) m_t = 0.00001;
-        return Math.abs(m - m_t) < thre;
+//        m_t = Math.abs(m_t) * thre;
+//        System.out.println(Math.abs(m - m_t) + " " + Math.abs(m_t)*thre + " " + ((Math.abs(m-m_t)<Math.abs(m_t)*thre)?"T":"F"));
+//        if(Math.abs(m-m_t)/Math.abs(m_t) < 0.1) System.out.println(Math.abs(m - m_t)/Math.abs(m_t) + " " + Math.abs(m - m_t));
+//        System.out.println((Math.abs(m - m_t)/Math.abs(m_t) < thre) + " " + (Math.abs(m - m_t) < thre));
+        return Math.abs(m - m_t)/Math.abs(m_t) < thre;
+//        return Math.abs(m - m_t) < thre;
     }
 
         //2つのベクトルが並行であるかどうかを返す
@@ -74,8 +78,9 @@ public class Tool {
             double tmp1 = calcRadAngle(p_bv,x_nv),
                    tmp2 = calcRadAngle(p_nv,x_bv);
 //            System.out.println(tmp1 + " " + tmp2);
-            if(hasAccuracy(tmp1,0.0) &&
-               hasAccuracy(tmp2,0.0)) {
+//            if(hasAccuracy(tmp1,0.0) &&
+//               hasAccuracy(tmp2,0.0)) {
+            if(hasAccuracy(tmp1,tmp2) == true) {
 //            if(isParallel(p_bv,x_nv) && isParallel(p_nv,x_bv)) {
 //                System.out.println("match!");
                 return true;
@@ -87,10 +92,10 @@ public class Tool {
     }
 
     static double correctDouble(double d) {
-            // 通常doubleの小数点以下桁数は14 現在：13
-        double tmp = d + 0.0000000000005;
-        long hoge = (long)(tmp * 1000000000000L);
-        return hoge / 1000000000000.0;
+            // 通常doubleの小数点以下桁数は14 現在：14
+        double tmp = d + 0.00000000000005;
+        long hoge = (long)(tmp * 10000000000000L);
+        return hoge / 10000000000000.0;
     }
 
     static Piece fuse(Piece p1, Piece p2, int p1_idx, int p2_idx) {

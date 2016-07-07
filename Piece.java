@@ -8,6 +8,7 @@ public class Piece {
     int dent_cnt;
     int[] dents;
     double max;
+    double error;
 //    Vector[] vectors;
 
     public Piece(int num) {
@@ -23,6 +24,7 @@ public class Piece {
         dent_cnt = 0;
         dents = new int[32];
         max = 100000000;
+//        error = 0.0;
     }
 
     public Piece(Piece p, double theta) {
@@ -85,6 +87,7 @@ public class Piece {
         }
         countUpDent();
         calcMax();
+        calcError();
     }
 
     public Piece(Piece copy) {
@@ -97,6 +100,7 @@ public class Piece {
         this.dent_cnt = copy.dent_cnt;
         this.dents = copy.dents.clone();
         this.max = copy.max;
+//        this.error = copy.error;
     }
 
     public Piece clone() {
@@ -141,6 +145,7 @@ public class Piece {
         }
         countUpDent();
         calcMax();
+//        calcError();
     }
 
 /*
@@ -198,6 +203,16 @@ public class Piece {
                 mx = get(i);
         }
         max = mx.length;
+    }
+
+    void calcError() {
+        double x = 0, y = 0;
+        for(int i=0;i<num;i++) {
+            x += get(i).dx;
+            y += get(i).dy;
+        }
+        Vector tmp = new Vector(x,y);
+        error = tmp.length;
     }
 
     boolean equals(Piece p) {

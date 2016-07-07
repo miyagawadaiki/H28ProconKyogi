@@ -4,9 +4,11 @@ import java.util.ArrayList;
 public class Solver {
     ArrayList<Piece> data;
     Frame frame;
+    double error;
 
     public Solver() {
         data = new ArrayList<Piece>();
+        error = 0.0;
     }
 
     public Solver(Solver copy) {
@@ -43,6 +45,12 @@ public class Solver {
         if(data.size() > 1) return false;
         else if(frame.equals(data.get(0))) return true;
         else return false;
+    }
+
+    void calcError() {
+        for(int i=0;i<data.size();i++) {
+            this.error += data.get(i).error;
+        }
     }
 
     public String toString() {
