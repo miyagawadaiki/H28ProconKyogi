@@ -20,6 +20,10 @@ public class Coord {
         this(c.x + v.dx, c.y + v.dy);
     }
 
+    public Coord(Vector v) {
+        this(v.dx, v.dy);
+    }
+
     public Coord clone() {
         return new Coord(this);
     }

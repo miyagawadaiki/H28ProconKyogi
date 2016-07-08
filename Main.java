@@ -7,12 +7,14 @@ public class Main {
 
 ///*
     public static void main(String[] args) {
+//        System.out.println(Tool.hasIntersection(new Vector(3,3),new Vector(0,0),new Vector(-5,2),new Vector(5,-2)));
         Solver first = new Solver();
         first.read();
-        reduce_piece_by_rec(first);
-        reduce_piece_by_stack(first);
+        solve_by_rec(first);
+//        reduce_piece_by_stack(first);
         System.out.println("\n\n\n\n");
         count = 0;
+//        reduce_piece_by_rec(first);
     }
 
     public static void solve_by_rec(Solver first) {
@@ -25,13 +27,25 @@ public class Main {
 
     public static void solve_rec(Solver now) {
         count++;
+        System.out.println(count);
+        System.out.println(now.toExString());
+//        System.out.println(now.toStringForRead()+"\n");
         if(now.isFinished() == true) {
+            end = System.nanoTime();
+            System.out.println("Time:" + (end - start) / 1000000f + "ms");
             System.out.println("finished!!!!!");
+            System.out.println(now.toStringForRead());
+            System.exit(1);
         }
         for(int i=0;i<now.frame.num;i++) {
             for(int j=0;j<now.data.size();j++) {
-                for(int k=0;k<now.data.get(i).num;k++) {
-
+                for(int k=0;k<now.data.get(j).num;k++) {
+                    if(now.canPut(i,j,k) == true) {
+                        System.out.println("Yattaze!");
+                        Solver tmp = now.clone();
+                        tmp.put(i,j,k);
+                        solve_rec(tmp);
+                    }
                 }
             }
         }

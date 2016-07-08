@@ -11,6 +11,18 @@ public class Tool {
         return Math.abs(m - m_t) < thre;
     }
 
+    static boolean hasIntersection(Vector v, Vector p_v, Vector w, Vector p_w) {
+        double a = v.dy / v.dx;
+        double b = p_v.dy - a * p_v.dx;
+        Vector t = new Vector(w,p_w);
+        boolean flag1 = (((p_w.dy - a * p_w.dx - b) > 0)?1:-1) * (((t.dy - a * t.dx - b) > 0)?1:-1) < 0;
+        a = w.dy / w.dx;
+        b = p_w.dy - a * p_w.dx;
+        t = new Vector(v,p_v);
+        boolean flag2 = (((p_v.dy - a * p_v.dx - b) > 0)?1:-1) * (((t.dy - a * t.dx - b) > 0)?1:-1) < 0;
+        return flag1 && flag2;
+    }
+
         // 2つのベクトル間の角度をラジアンで返す
         // 範囲：0 ~ π
     static double calcCosAngle(Vector a, Vector b) {

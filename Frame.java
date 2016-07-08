@@ -1,8 +1,8 @@
-import java.util.Scanner;
+import java.util.*;
 
 public class Frame {
     int num;
-    Coord[] coords;
+    ArrayList<Coord> coords;
 //    Vector[] vectors;
     double total_length;
     double max;
@@ -10,14 +10,14 @@ public class Frame {
     public Frame(int num) {
         this.num = num;
 //        vectors = new Vector[num];
-        coords = new Coord[num];
+        coords = new ArrayList<Coord>();
     }
 
     public Frame(Frame copy) {
         this(copy.num);
         for(int i=0;i<num;i++)
 //            this.vectors[i] = copy.vectors[i].clone();
-            this.coords[i] = copy.coords[i].clone();
+            this.coords.add(copy.coords.get(i).clone());
         this.max = copy.max;
     }
 
@@ -27,7 +27,7 @@ public class Frame {
 
     void read(Scanner stdIn) {
         for(int i=0;i<num;i++) {
-            coords[i] = new Coord(stdIn.nextDouble(), stdIn.nextDouble());
+            coords.add(new Coord(stdIn.nextDouble(), stdIn.nextDouble()));
         }
         calcMax();
     }
@@ -49,7 +49,17 @@ public class Frame {
         if(n > num)
             throw new IllegalArgumentException("no such vector in this Piece : \n" + this.toString() + "\n");
 //        return vectors[n];
-        return new Vector(coords[n],coords[getNextIdx(n)]);
+        return new Vector(coords.get(n),coords.get(getNextIdx(n)));
+    }
+
+    Vector getBack(int n) {
+//        return vectors[getBackIdx(n)];
+        return get(getBackIdx(n));
+    }
+
+    Vector getNext(int n) {
+//        return vectors[getNextIdx(n)];
+        return get(getNextIdx(n));
     }
 
     int getBackIdx(int n) {
@@ -71,11 +81,15 @@ public class Frame {
 
     void calcMax() {
         Vector mx = new Vector(0,0);
-        for(int i=0;i<coords.length;i++) {
+        for(int i=0;i<coords.size();i++) {
             if(get(i).length > mx.length)
                 mx = get(i);
         }
         max = mx.length;
+    }
+
+    double getAngle(int n) {
+        return Tool.calcAbsAngle(get(n), new Vector(getBack(n),Math.PI));
     }
 
     boolean equals(Piece p) {
@@ -102,7 +116,7 @@ public class Frame {
         String s = "";
         s += num;
         for(int i=0;i<num;i++) {
-            s += String.format("\n%f %f", coords[i].x, coords[i].y);
+            s += String.format("\n%f %f", coords.get(i).x, coords.get(i).y);
         }
         return s;
     }
