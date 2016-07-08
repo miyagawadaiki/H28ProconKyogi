@@ -120,7 +120,8 @@ public class Piece {
 //        return vectors[n];
 //        System.out.println(coords[getBackIdx(n)]);
 //        System.out.println(coords[n]);
-        return new Vector(new Vector(coords[getBackIdx(n)], coords[n]), theta);
+//        return new Vector(new Vector(coords[getBackIdx(n)], coords[n]), theta);
+        return new Vector(new Vector(coords[n], coords[getNextIdx(n)]), theta);
     }
 
     Vector getBack(int n) {
@@ -139,6 +140,10 @@ public class Piece {
 
     int getNextIdx(int n) {
         return (n+1) % num;
+    }
+
+    double getAngle(int n) {
+        return 0.0;
     }
 
     void read(Scanner stdIn) {

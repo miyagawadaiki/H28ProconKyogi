@@ -28,7 +28,13 @@ public class Main {
         if(now.isFinished() == true) {
             System.out.println("finished!!!!!");
         }
-
+        for(int i=0;i<now.frame.num;i++) {
+            for(int j=0;j<now.data.size();j++) {
+                for(int k=0;k<now.data.get(i).num;k++) {
+                    
+                }
+            }
+        }
     }
 
     public static void reduce_piece_by_rec(Solver first) {
