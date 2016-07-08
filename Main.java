@@ -9,28 +9,44 @@ public class Main {
     public static void main(String[] args) {
         Solver first = new Solver();
         first.read();
-        solve_(first);
-        solve(first);
+        reduce_piece_by_stack(first);
         System.out.println("\n\n\n\n");
         count = 0;
+        reduce_piece_by_rec(first);
     }
 
-    public static void solve_(Solver first) {
-        start = System.nanoTime();
-        recursion(first);
+    public static void solve_by_rec(Solver first) {
+        solve_rec(first);
         end = System.nanoTime();
         System.out.println("Time:" + (end - start) / 1000000f + "ms");
         System.out.println(count);
-        System.out.println("Damedaze!");
+        System.out.println("Damedaze! in solve_by_rec()");
     }
 
-    public static void solve(Solver first) {
+    public static void solve_rec(Solver now) {
+        count++;
+        if(now.isFinished() == true) {
+            System.out.println("finished!!!!!");
+        }
+
+    }
+
+    public static void reduce_piece_by_rec(Solver first) {
+        start = System.nanoTime();
+        reduce_rec(first);
+        end = System.nanoTime();
+        System.out.println("Time:" + (end - start) / 1000000f + "ms");
+        System.out.println(count);
+        System.out.println("Damedaze! in reduce_piece_by_rec()");
+    }
+
+    public static void reduce_piece_by_stack(Solver first) {
         start = System.nanoTime();
         Stack<Solver> temp = new Stack<Solver>();
         temp.push(first);
         ArrayList<Solver> comb_list = new ArrayList<Solver>();
 
-        System.out.println(first);
+        System.out.println(first.toString());
 
         while(temp.size() > 0) {
             Solver now = temp.pop();
@@ -85,7 +101,7 @@ public class Main {
 
     }
 
-    static void recursion(Solver now) {
+    static void reduce_rec(Solver now) {
 //        if(count >= 50) System.exit(1);
         count++;
 //        System.out.println(now.data.size() + "\t" + count);
@@ -116,7 +132,7 @@ public class Main {
                             brunch.data.remove(i);
                             brunch.data.remove(j-1);
                             brunch.data.add(Tool.fuse(p,c,k,l));
-                            recursion(brunch);
+                            reduce_rec(brunch);
                         }
                     }
                 }

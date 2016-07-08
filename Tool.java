@@ -1,5 +1,5 @@
 public class Tool {
-    static double thre = 0.1;
+    static double thre = 0.05;
 
         //2つのベクトル間の角度をラジアンで返す
     static double calcRadAngle(Vector a, Vector b) {
@@ -57,8 +57,8 @@ public class Tool {
 //        System.out.println(Math.abs(m - m_t) + " " + Math.abs(m_t)*thre + " " + ((Math.abs(m-m_t)<Math.abs(m_t)*thre)?"T":"F"));
 //        if(Math.abs(m-m_t)/Math.abs(m_t) < 0.1) System.out.println(Math.abs(m - m_t)/Math.abs(m_t) + " " + Math.abs(m - m_t));
 //        System.out.println((Math.abs(m - m_t)/Math.abs(m_t) < thre) + " " + (Math.abs(m - m_t) < thre));
-        return Math.abs(m - m_t)/Math.abs(m_t) < thre;
-//        return Math.abs(m - m_t) < thre;
+//        return Math.abs(m - m_t)/Math.abs(m_t) < thre;
+        return Math.abs(m - m_t) < thre;
     }
 
         //2つのベクトルが並行であるかどうかを返す

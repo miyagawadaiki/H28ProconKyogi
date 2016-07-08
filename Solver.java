@@ -42,8 +42,9 @@ public class Solver {
     }
 
     public boolean isFinished() {
-        if(data.size() > 1) return false;
-        else if(frame.equals(data.get(0))) return true;
+//        if(data.size() > 1) return false;
+//        else if(frame.equals(data.get(0))) return true;
+        if(frame.equals(data.get(0))) return true;
         else return false;
     }
 
@@ -51,6 +52,26 @@ public class Solver {
         for(int i=0;i<data.size();i++) {
             this.error += data.get(i).error;
         }
+    }
+
+    public String toStringForRead() {
+        String s = "";
+        s += frame.toStringForRead() + "\n";
+        s += data.size();
+        for(int i=0;i<data.size();i++) {
+            s += "\n" + data.get(i).toStringForRead();
+        }
+        return s;
+    }
+
+    public String toExString() {
+        String s = "";
+        s += "f:\n";
+        s += frame.toString() + "\n";
+        s += "p:\n";
+        for(int i=0;i<data.size();i++)
+            s += String.format("<%d> %s\n",i,data.get(i).toExString());
+        return s;
     }
 
     public String toString() {

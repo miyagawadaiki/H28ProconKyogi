@@ -98,6 +98,15 @@ public class Frame {
         }
     }
 
+    public String toStringForRead() {
+        String s = "";
+        s += num;
+        for(int i=0;i<num;i++) {
+            s += String.format("\n%f %f", coords[i].x, coords[i].y);
+        }
+        return s;
+    }
+
     public String toString() {
         String s = "";
 //        for(Vector i : vectors) {

@@ -3,6 +3,7 @@ import java.util.*;
 public class Piece {
     int num;
     double theta;
+    Vector ref;
     Coord c;
     Coord[] coords;
     int dent_cnt;
@@ -14,6 +15,7 @@ public class Piece {
     public Piece(int num) {
         this.num = num;
         theta = 0.0;
+        ref = new Vector();
         c = new Coord();
         coords = new Coord[num];
 //        vectors = new Vector[num];
@@ -235,9 +237,25 @@ public class Piece {
         }
     }
 
+    public String toStringForRead() {
+        String s = "";
+        s += String.format("%d %f %f %f", num, ref.dx, ref.dy, theta);
+        for(int i=0;i<num;i++) {
+            s += String.format("\n%f %f", coords[i].x, coords[i].y);
+        }
+        return s;
+    }
+
+    public String toExString() {
+        String s = "";
+        s += String.format("[%2d:%2d:%4f]\n\t", num, dent_cnt, theta);
+        s += this.toString();
+        return s;
+    }
+
     public String toString() {
         String s = "";
-        s += String.format("[%2d:%2d:%4f] ", num, dent_cnt, theta);
+        s += String.format("{[%.4f,%.4f],%.4f}\t", ref.dx, ref.dy, theta);
 //        for(Vector i : vectors) {
 //            s += i.toString() + " ";
 //        }
