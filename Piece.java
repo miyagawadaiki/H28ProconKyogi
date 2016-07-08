@@ -35,40 +35,23 @@ public class Piece {
 //        System.out.printf("turn\n%f\n%s\n",theta,this);
     }
 
-    public Piece(Piece p1, Piece p2, int p1_idx, int p2_idx, int n, boolean flag) {
+    public Piece(Piece p1, Piece p2, int p1_idx, int p2_idx, int n) {
         this(n);
-//        System.out.println(this);
+        p2 = new Piece(p2, Tool.calcAngle(p1.get(p1_idx), p2.get(p2_idx))+Math.PI);
 
-        Vector p1b = p1.getBack(p1_idx);
-        Vector p1n = p1.getNext(p1_idx);
-        Vector p2b = p2.getBack(p2_idx);
-        Vector p2n = p2.getNext(p2_idx);
-        Vector p12 = new Vector(p1b,p2n);
-        Vector p21 = new Vector(p2b, p1n);
-
-//        System.out.printf("%s %s %s %s\n%s %s\n", p1b, p2n, p2b, p1n, p12, p21);
+        Vector v_p12 = new Vector(p1.getBack(p1_idx), p2.getNext(p2_idx));
+        Vector v_p21 = new Vector(p2.getBack(p2_idx), p1.getNext(p1_idx));
 
         int index = 0;
         int pi = (p1_idx+2)%p1.num;
         while(true) {
             if(pi == p1.getBackIdx(p1_idx)) break;
-//            System.out.printf("p1_%d:%s\n",pi,p1.get(pi).toString());
-//            this.vectors[index++] = p1.vectors[pi];
             this.set(index++, p1.get(pi));
-//            System.out.println("a");
             pi = (pi+1)%p1.num;
         }
-//        System.out.printf("p12:%s\n",p12);
 
-        if(flag) {
-//            this.vectors[index++] = p12;
-            this.set(index++, p12);
-        } else {
-//            this.vectors[index++] = p1b;
-//            this.vectors[index++] = p2n;
-            this.set(index++, p1b);
-            this.set(index++, p2n);
-        }
+        this.set(index++, v_p12);
+
         pi = (p2_idx+2)%p2.num;
         while(true) {
             if(pi == p2.getBackIdx(p2_idx)) break;
@@ -77,16 +60,9 @@ public class Piece {
             this.set(index++, p2.get(pi));
             pi = (pi+1)%p2.num;
         }
-//        System.out.printf("p21:%s\n",p21);
-        if(flag) {
-//            this.vectors[index] = p21;
-            this.set(index++, p21);
-        } else {
-//            this.vectors[index++] = p2b;
-//            this.vectors[index++] = p1n;
-            this.set(index++, p2b);
-            this.set(index++, p1n);
-        }
+
+        this.set(index, v_p21);
+
         countUpDent();
         calcMax();
         calcError();

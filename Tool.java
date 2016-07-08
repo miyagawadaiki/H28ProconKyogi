@@ -68,7 +68,9 @@ public class Tool {
         return hasAccuracy(Math.abs(a.dx * b.dy) - Math.abs(a.dy * b.dx),0.0);
     }
 
-    static boolean checkFitness(Piece p, Piece x, int p_c, int x_c) {
+    static boolean canFuse(Piece p, Piece q, int p_c, int q_c) {
+        Piece x = new Piece(q, calcAngle(p.get(q_c), q.get(q_c))+Math.PI);
+        int x_c = q_c;
         Vector p_cv = p.get(p_c), x_cv = x.get(x_c);
         Vector p_bv = p.getBack(p_c), x_bv = x.getBack(x_c);
         Vector p_nv = p.getNext(p_c), x_nv = x.getNext(x_c);
@@ -101,10 +103,6 @@ public class Tool {
     }
 
     static Piece fuse(Piece p1, Piece p2, int p1_idx, int p2_idx) {
-        return new Piece(p1,p2,p1_idx,p2_idx,p1.num-3+p2.num-3+2,true);
-    }
-
-    static Piece join(Piece p1, Piece p2, int p1_idx, int p2_idx) {
-        return new Piece(p1,p2,p1_idx,p2_idx,p1.num+p2.num-2,false);
+        return new Piece(p1,p2,p1_idx,p2_idx,p1.num-3+p2.num-3+2);
     }
 }

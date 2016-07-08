@@ -31,7 +31,7 @@ public class Main {
         for(int i=0;i<now.frame.num;i++) {
             for(int j=0;j<now.data.size();j++) {
                 for(int k=0;k<now.data.get(i).num;k++) {
-                    
+
                 }
             }
         }
@@ -78,21 +78,21 @@ public class Main {
 //                            System.out.println("\t\t\t"+now.data.get(j).get(l));
                             Piece p = now.data.get(i);
                             Piece q = now.data.get(j);
-                            Vector a = p.get(k);
-                            Vector b = q.get(l);
-                            Piece c = new Piece(q,Tool.calcLinalizeAngle(a,b));
+//                            Vector a = p.get(k);
+//                            Vector b = q.get(l);
+//                            Piece c = new Piece(q,Tool.calcLinalizeAngle(a,b));
 //                            System.out.println(c);
 //                            q.rotate(Tool.calcLinalizeAngle(a,b));
-//                            if(Tool.checkFitness(p,c,k,l) &&
+//                            if(Tool.canFuse(p,c,k,l) &&
 //                              (Tool.fuse(p,c,k,l).max <= now.frame.max)) {
-                            if(Tool.checkFitness(p,q,k,l)) {
+//                            if(Tool.canFuse(p,q,k,l)) {
+                            if(Tool.canFuse(p,q,k,l) == true) {
 //                            if(Tool.hasAccuracy(0.0, a.length - b.length)) {
 //                                System.out.println("Yattaze");
                                 Solver brunch = now.clone();
                                 brunch.data.remove(i);
                                 brunch.data.remove(j-1);
-                                brunch.data.add(Tool.fuse(p,c,k,l));
-//                                brunch.data.add(Tool.join(p,c,k,l));
+                                brunch.data.add(Tool.fuse(p,q,k,l));
                                 temp.push(brunch);
                             }
                         }
@@ -128,16 +128,12 @@ public class Main {
                     for(int l=0;l<now.data.get(j).num;l++) {
                         Piece p = now.data.get(i);
                         Piece q = now.data.get(j);
-                        Vector a = p.get(k);
-                        Vector b = q.get(l);
-                        double th = Tool.calcLinalizeAngle(a,b);
-                        Piece c = new Piece(q,Tool.calcLinalizeAngle(a,b));
-                        if(Tool.checkFitness(p,q,k,l)) {
+                        if(Tool.canFuse(p,q,k,l) == true) {
 //                            System.out.println("\nhogehogehogehoge  " + Tool.calcLinalizeAngle(a,b) + "\n");
                             Solver brunch = now.clone();
                             brunch.data.remove(i);
                             brunch.data.remove(j-1);
-                            brunch.data.add(Tool.fuse(p,c,k,l));
+                            brunch.data.add(Tool.fuse(p,q,k,l));
                             reduce_rec(brunch);
                         }
                     }
