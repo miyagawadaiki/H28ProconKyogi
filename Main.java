@@ -9,10 +9,10 @@ public class Main {
     public static void main(String[] args) {
         Solver first = new Solver();
         first.read();
+        reduce_piece_by_rec(first);
         reduce_piece_by_stack(first);
         System.out.println("\n\n\n\n");
         count = 0;
-        reduce_piece_by_rec(first);
     }
 
     public static void solve_by_rec(Solver first) {
@@ -52,7 +52,7 @@ public class Main {
         temp.push(first);
         ArrayList<Solver> comb_list = new ArrayList<Solver>();
 
-        System.out.println(first.toString());
+        System.out.println(first.toExString());
 
         while(temp.size() > 0) {
             Solver now = temp.pop();
@@ -110,7 +110,7 @@ public class Main {
     static void reduce_rec(Solver now) {
 //        if(count >= 50) System.exit(1);
         count++;
-//        System.out.println(now.data.size() + "\t" + count);
+        System.out.println(now.data.size() + "\t" + count);
 //        System.out.println(now.error);
 //        if(now.data.size() <= 11)
 //        System.out.println(now);

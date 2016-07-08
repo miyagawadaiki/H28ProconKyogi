@@ -119,7 +119,7 @@ public class Piece {
     }
 
     double getAngle(int n) {
-        return 0.0;
+        return Tool.calcAbsAngle(get(n), new Vector(getBack(n),Math.PI));
     }
 
     void read(Scanner stdIn) {
@@ -229,14 +229,21 @@ public class Piece {
 
     public String toExString() {
         String s = "";
-        s += String.format("[%2d:%2d:%4f]\n\t", num, dent_cnt, theta);
+        s += String.format("[%2d:%2d:%4f]", num, dent_cnt, theta);
+        s += "\t(";
+        for(int i=0;i<num;i++) {
+            if(i > 0) s += " ";
+            s += String.format("%f", Math.toDegrees(getAngle(i)));
+//            s += String.format("%f", getAngle(i));
+        }
+        s += ")\t";
         s += this.toString();
         return s;
     }
 
     public String toString() {
         String s = "";
-        s += String.format("{[%.4f,%.4f],%.4f}\t", ref.dx, ref.dy, theta);
+        s += String.format("{[%.4f,%.4f],%.4f}\n\t", ref.dx, ref.dy, theta);
 //        for(Vector i : vectors) {
 //            s += i.toString() + " ";
 //        }

@@ -1,9 +1,19 @@
 public class Tool {
     static double thre = 0.05;
 
+        //真値と誤差を比較して許容範囲に入っているか調べる
+    static boolean hasAccuracy(double m, double m_t) {
+//        m_t = Math.abs(m_t) * thre;
+//        System.out.println(Math.abs(m - m_t) + " " + Math.abs(m_t)*thre + " " + ((Math.abs(m-m_t)<Math.abs(m_t)*thre)?"T":"F"));
+//        if(Math.abs(m-m_t)/Math.abs(m_t) < 0.1) System.out.println(Math.abs(m - m_t)/Math.abs(m_t) + " " + Math.abs(m - m_t));
+//        System.out.println((Math.abs(m - m_t)/Math.abs(m_t) < thre) + " " + (Math.abs(m - m_t) < thre));
+//        return Math.abs(m - m_t)/Math.abs(m_t) < thre;
+        return Math.abs(m - m_t) < thre;
+    }
+
         // 2つのベクトル間の角度をラジアンで返す
         // 範囲：0 ~ π
-    static double calcAbsAngle(Vector a, Vector b) {
+    static double calcCosAngle(Vector a, Vector b) {
 //        return Math.acos((a.dx * b.dx + a.dy * b.dy) / (a.length * b.length));
         double c = (a.dx * b.dx + a.dy * b.dy) / (a.length * b.length);
 //        System.out.println(c);
@@ -16,22 +26,17 @@ public class Tool {
         // x軸からの角度を返す
         // 範囲：-π ~ π
     static double calcTheta(Vector v) {
-        double d_v = calcAbsAngle(v,new Vector(1.0,0.0));
+        double d_v = calcCosAngle(v,new Vector(1.0,0.0));
         if(v.dy >= 0) return d_v;
         else return -1 * d_v;
     }
 
-    static double calcTheta(Vector a, Vector b) {
-        return calcTheta(b) - calcTheta(a);
-    }
-
-    static double calcLinalizeAngle(Vector v, Vector x) {
-        double d_a = calcAbsAngle(v,x);
-        double v_a = calcTheta(v);
-        double x_a = calcTheta(x);
-//        System.out.println(d_a + "\t" + v_a + "\t" + x_a);
-        if(v_a > x_a) return d_a - Math.PI;
-        else return Math.PI - d_a;
+        // 二つのベクトル間の角度を返す
+        // 範囲：0 ~ 2π
+    static double calcAbsAngle(Vector v_s, Vector v_g) {
+        double tmp = calcAngle(v_s, v_g);
+        if(tmp >= 0) return tmp;
+        return 2 * Math.PI + tmp;
     }
 
         // 基準ベクトルから目標ベクトルまでの角移動量を返す
@@ -44,25 +49,6 @@ public class Tool {
         return calcTheta(tmp);
     }
 
-    static double calcDTheta(Vector v) {
-        double theta = calcTheta(v);
-        return calcDTheta(theta);
-    }
-
-    static double calcDTheta(double theta) {
-        return theta - (int)(theta / Math.PI) * 2 * Math.PI;
-    }
-
-        //真値と誤差を比較して許容範囲に入っているか調べる
-    static boolean hasAccuracy(double m, double m_t) {
-//        m_t = Math.abs(m_t) * thre;
-//        System.out.println(Math.abs(m - m_t) + " " + Math.abs(m_t)*thre + " " + ((Math.abs(m-m_t)<Math.abs(m_t)*thre)?"T":"F"));
-//        if(Math.abs(m-m_t)/Math.abs(m_t) < 0.1) System.out.println(Math.abs(m - m_t)/Math.abs(m_t) + " " + Math.abs(m - m_t));
-//        System.out.println((Math.abs(m - m_t)/Math.abs(m_t) < thre) + " " + (Math.abs(m - m_t) < thre));
-//        return Math.abs(m - m_t)/Math.abs(m_t) < thre;
-        return Math.abs(m - m_t) < thre;
-    }
-
         //2つのベクトルが並行であるかどうかを返す
     static boolean isParallel(Vector a, Vector b) {
         return hasAccuracy(Math.abs(a.dx * b.dy) - Math.abs(a.dy * b.dx),0.0);
@@ -72,26 +58,25 @@ public class Tool {
         Piece x = new Piece(q, calcAngle(p.get(q_c), q.get(q_c))+Math.PI);
         int x_c = q_c;
         Vector p_cv = p.get(p_c), x_cv = x.get(x_c);
-        Vector p_bv = p.getBack(p_c), x_bv = x.getBack(x_c);
-        Vector p_nv = p.getNext(p_c), x_nv = x.getNext(x_c);
+//        Vector p_bv = p.getBack(p_c), x_bv = x.getBack(x_c);
+//        Vector p_nv = p.getNext(p_c), x_nv = x.getNext(x_c);
 
-        if(hasAccuracy(p_cv.length,x_cv.length) == false)
-            return false;
-        else {
+        if(hasAccuracy(p_cv.length,x_cv.length) == false) return false;
 //            System.out.printf("%s %s %s %s %s %s\n", p_cv, x_cv, p_bv, x_nv, p_nv, x_bv);
-            double tmp1 = calcAbsAngle(p_bv,x_nv),
-                   tmp2 = calcAbsAngle(p_nv,x_bv);
+//        double tmp1 = calcCosAngle(p_bv,x_nv);
+//        double tmp2 = calcCosAngle(p_nv,x_bv);
 //            System.out.println(tmp1 + " " + tmp2);
 //            if(hasAccuracy(tmp1,0.0) &&
 //               hasAccuracy(tmp2,0.0)) {
-            if(hasAccuracy(tmp1,tmp2) == true) {
+//        if(hasAccuracy(tmp1,tmp2) == true) {
+        else if(hasAccuracy(p.getAngle(p_c) + x.getAngle(x.getNextIdx(x_c)), Math.PI) &&
+                hasAccuracy(p.getAngle(p.getNextIdx(p_c)) + x.getAngle(x_c), Math.PI)) {
 //            if(isParallel(p_bv,x_nv) && isParallel(p_nv,x_bv)) {
 //                System.out.println("match!");
-                return true;
-            }
-            else {
-                return false;
-            }
+            return true;
+        }
+        else {
+            return false;
         }
     }
 
