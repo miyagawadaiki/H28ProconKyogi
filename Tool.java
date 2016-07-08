@@ -1,8 +1,9 @@
 public class Tool {
     static double thre = 0.05;
 
-        //2つのベクトル間の角度をラジアンで返す
-    static double calcRadAngle(Vector a, Vector b) {
+        // 2つのベクトル間の角度をラジアンで返す
+        // 範囲：0 ~ π
+    static double calcAbsAngle(Vector a, Vector b) {
 //        return Math.acos((a.dx * b.dx + a.dy * b.dy) / (a.length * b.length));
         double c = (a.dx * b.dx + a.dy * b.dy) / (a.length * b.length);
 //        System.out.println(c);
@@ -12,11 +13,12 @@ public class Tool {
         return correctDouble(Math.acos(c));
     }
 
-        //x軸からの角度を返す
+        // x軸からの角度を返す
+        // 範囲：-π ~ π
     static double calcTheta(Vector v) {
-        double d_v = calcRadAngle(v,new Vector(1.0,0.0));
+        double d_v = calcAbsAngle(v,new Vector(1.0,0.0));
         if(v.dy >= 0) return d_v;
-        else return Math.PI * 2 - d_v;
+        else return -1 * d_v;
     }
 
     static double calcTheta(Vector a, Vector b) {
@@ -24,7 +26,7 @@ public class Tool {
     }
 
     static double calcLinalizeAngle(Vector v, Vector x) {
-        double d_a = calcRadAngle(v,x);
+        double d_a = calcAbsAngle(v,x);
         double v_a = calcTheta(v);
         double x_a = calcTheta(x);
 //        System.out.println(d_a + "\t" + v_a + "\t" + x_a);
@@ -32,14 +34,14 @@ public class Tool {
         else return Math.PI - d_a;
     }
 
-    static double calcAngle(Vector v1, Vector v2) {
-        double t12 = calcRadAngle(v1,v2);
-        double t1 = calcTheta(v1);
-        double t2 = calcTheta(v2);
-        double theta = t2-t1;
+        // 基準ベクトルから目標ベクトルまでの角移動量を返す
+        // 範囲：-π ~ π
+    static double calcAngle(Vector v_s, Vector v_g) {
+        double t_s = calcTheta(v_s);
+        Vector tmp = new Vector(v_g, -t_s);
 //        if(t2 - t1 <= Math.PI) return t2-t1;
 //        else return t1-t2;
-        return calcDTheta(theta);
+        return calcTheta(tmp);
     }
 
     static double calcDTheta(Vector v) {
@@ -75,8 +77,8 @@ public class Tool {
             return false;
         else {
 //            System.out.printf("%s %s %s %s %s %s\n", p_cv, x_cv, p_bv, x_nv, p_nv, x_bv);
-            double tmp1 = calcRadAngle(p_bv,x_nv),
-                   tmp2 = calcRadAngle(p_nv,x_bv);
+            double tmp1 = calcAbsAngle(p_bv,x_nv),
+                   tmp2 = calcAbsAngle(p_nv,x_bv);
 //            System.out.println(tmp1 + " " + tmp2);
 //            if(hasAccuracy(tmp1,0.0) &&
 //               hasAccuracy(tmp2,0.0)) {
