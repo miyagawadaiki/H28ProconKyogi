@@ -63,38 +63,52 @@ public class Solver {
     public boolean canPut(int fv_i, int dp_i, int pv_i) {
         if(Tool.hasAccuracy(frame.getAngle(fv_i),data.get(dp_i).getAngle(pv_i)) == false)
             return false;
-        data.get(dp_i).rotate(Tool.calcAngle(data.get(dp_i).get(pv_i), frame.get(fv_i)));
+//        System.out.print("Yattaze");
+        data.get(dp_i).rotate(Tool.calcAngle(data.get(dp_i).getV(pv_i), frame.getV(fv_i)));
         Vector v_sf = new Vector();
         for(int i=0;i<frame.num;i++) {
-            v_sf = new Vector(v_sf, frame.get(i));
-            Vector v_sp = new Vector();
+            Vector v_sp = v_sf.clone();
             for(int j=0;j<data.get(dp_i).num;j++) {
-                v_sp = new Vector(v_sp, data.get(dp_i).get(j));
-                if(Tool.hasIntersection(frame.get(i), v_sf, data.get(dp_i).get(j), v_sp) == true)
+                if(Tool.hasIntersection(frame.getV(i), v_sf, data.get(dp_i).getV(j), v_sp) == true) {
+//                    System.out.printf(" %s %s\n", frame.getV(i), data.get(dp_i).getV(j));
                     return false;
+                }
+                v_sp = new Vector(v_sp, data.get(dp_i).getV(j));
             }
+            v_sf = new Vector(v_sf, frame.getV(i));
         }
+//        System.out.println("Yattaze");
         return true;
     }
 
     public void put(int fv_i, int dp_i, int pv_i) {
+//        System.out.println(this.toString());
         Piece p = data.get(dp_i);
-        frame.coords.add(fv_i,new Coord(frame.coords.get(frame.getBackIdx(fv_i)), new Vector(frame.getBack(fv_i),new Vector(p.getBack(pv_i),Math.PI))));
-        System.out.println(this.toString());
-        frame.coords.add(fv_i+2,new Coord(frame.coords.get(fv_i), new Vector(frame.get(fv_i),new Vector(p.get(pv_i),Math.PI))));
-        System.out.println(this.toString());
-        frame.coords.remove(fv_i+1);
-        System.out.println(this.toString());
+//        frame.add(fv_i,new Coord(frame.getC(frame.getBackIdx(fv_i)), new Vector(frame.getVBack(fv_i),new Vector(p.getVBack(pv_i),Math.PI))));
+        if(Tool.hasAccuracy(frame.getVBack(fv_i).length, p.getVBack(pv_i).length) == false)
+            frame.add(fv_i,new Coord(frame.getCBack(fv_i), new Vector(frame.getVBack(fv_i),new Vector(p.getVBack(pv_i),Math.PI))));
+//        System.out.println(this.toString());
+//        System.out.println(this.toStringForRead());
+//        frame.add(fv_i+2,new Coord(frame.getC(fv_i), new Vector(frame.getV(fv_i),new Vector(p.getV(pv_i),Math.PI))));
+        if(Tool.hasAccuracy(frame.getV(fv_i).length, p.getV(pv_i).length) == false)
+            frame.add(fv_i+2,new Coord(frame.getC(fv_i+1), p.getV(pv_i)));
+//        System.out.println(this.toString());
+//        System.out.println(this.toStringForRead());
+        frame.remove(fv_i+1);
+//        System.out.println(this.toString());
+//        System.out.println(this.toStringForRead());
         int p_i = p.getBackIdx(pv_i);
         for(int i=1;i<=data.get(dp_i).num-3;i++) {
             int tmp = p_i;
             p_i = p.getBackIdx(p_i);
-            frame.coords.add(fv_i+i, new Coord(frame.coords.get(fv_i+i-1),new Vector(p.coords[tmp],p.coords[p_i])));
-            System.out.println(this.toString());
+            frame.add(fv_i+i, new Coord(frame.getC(fv_i+i-1),new Vector(p.getC(tmp),p.getC(p_i))));
+//            System.out.println(this.toString());
+//            System.out.println(this.toStringForRead());
         }
+        frame.num = frame.coords.size();
         Vector ref = new Vector();
         for(int i=0;i<fv_i;i++) {
-            ref = new Vector(ref, frame.get(i));
+            ref = new Vector(ref, frame.getV(i));
         }
         p.ref = ref.clone();
         fixed.add(p.clone());

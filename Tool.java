@@ -15,12 +15,12 @@ public class Tool {
         double a = v.dy / v.dx;
         double b = p_v.dy - a * p_v.dx;
         Vector t = new Vector(w,p_w);
-        boolean flag1 = (((p_w.dy - a * p_w.dx - b) > 0)?1:-1) * (((t.dy - a * t.dx - b) > 0)?1:-1) < 0;
+        if((((p_w.dy - a * p_w.dx - b) > 0)?1:-1) * (((t.dy - a * t.dx - b) > 0)?1:-1) > 0)
+            return false;
         a = w.dy / w.dx;
         b = p_w.dy - a * p_w.dx;
         t = new Vector(v,p_v);
-        boolean flag2 = (((p_v.dy - a * p_v.dx - b) > 0)?1:-1) * (((t.dy - a * t.dx - b) > 0)?1:-1) < 0;
-        return flag1 && flag2;
+        return ((((p_v.dy - a * p_v.dx - b) > 0)?1:-1) * (((t.dy - a * t.dx - b) > 0)?1:-1) < 0);
     }
 
         // 2つのベクトル間の角度をラジアンで返す
@@ -67,11 +67,11 @@ public class Tool {
     }
 
     static boolean canFuse(Piece p, Piece q, int p_c, int q_c) {
-        Piece x = new Piece(q, calcAngle(p.get(q_c), q.get(q_c))+Math.PI);
+        Piece x = new Piece(q, calcAngle(p.getV(q_c), q.getV(q_c))+Math.PI);
         int x_c = q_c;
-        Vector p_cv = p.get(p_c), x_cv = x.get(x_c);
-//        Vector p_bv = p.getBack(p_c), x_bv = x.getBack(x_c);
-//        Vector p_nv = p.getNext(p_c), x_nv = x.getNext(x_c);
+        Vector p_cv = p.getV(p_c), x_cv = x.getV(x_c);
+//        Vector p_bv = p.getVBack(p_c), x_bv = x.getVBack(x_c);
+//        Vector p_nv = p.getVNext(p_c), x_nv = x.getVNext(x_c);
 
         if(hasAccuracy(p_cv.length,x_cv.length) == false) return false;
 //            System.out.printf("%s %s %s %s %s %s\n", p_cv, x_cv, p_bv, x_nv, p_nv, x_bv);

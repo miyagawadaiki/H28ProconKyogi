@@ -17,7 +17,7 @@ public class Frame {
         this(copy.num);
         for(int i=0;i<num;i++)
 //            this.vectors[i] = copy.vectors[i].clone();
-            this.coords.add(copy.coords.get(i).clone());
+            this.coords.add(copy.getC(i).clone());
         this.max = copy.max;
     }
 
@@ -45,21 +45,36 @@ public class Frame {
     }
 */
 
-    Vector get(int n) {
+    void add(Coord c) {
+        coords.add(c);
+        num++;
+    }
+
+    void add(int n, Coord c) {
+        coords.add(n,c);
+        num++;
+    }
+
+    void remove(int n) {
+        coords.remove(n);
+        num--;
+    }
+
+    Vector getV(int n) {
         if(n > num)
             throw new IllegalArgumentException("no such vector in this Piece : \n" + this.toString() + "\n");
 //        return vectors[n];
-        return new Vector(coords.get(n),coords.get(getNextIdx(n)));
+        return new Vector(getC(n),getCNext(n));
     }
 
-    Vector getBack(int n) {
+    Vector getVBack(int n) {
 //        return vectors[getBackIdx(n)];
-        return get(getBackIdx(n));
+        return getV(getBackIdx(n));
     }
 
-    Vector getNext(int n) {
+    Vector getVNext(int n) {
 //        return vectors[getNextIdx(n)];
-        return get(getNextIdx(n));
+        return getV(getNextIdx(n));
     }
 
     int getBackIdx(int n) {
@@ -70,26 +85,38 @@ public class Frame {
         return (n+1) % num;
     }
 
+    Coord getC(int n) {
+        return coords.get(n);
+    }
+
+    Coord getCBack(int n) {
+        return getC(getBackIdx(n));
+    }
+
+    Coord getCNext(int n) {
+        return getC(getNextIdx(n));
+    }
+
     double totalLength() {
         double s = 0;
 //        for(Vector v : vectors)
 //            s += v.length;
         for(int i=0;i<num;i++)
-            s += get(i).length;
+            s += getV(i).length;
         return s;
     }
 
     void calcMax() {
         Vector mx = new Vector(0,0);
-        for(int i=0;i<coords.size();i++) {
-            if(get(i).length > mx.length)
-                mx = get(i);
+        for(int i=0;i<num;i++) {
+            if(getV(i).length > mx.length)
+                mx = getV(i);
         }
         max = mx.length;
     }
 
     double getAngle(int n) {
-        return Tool.calcAbsAngle(get(n), new Vector(getBack(n),Math.PI));
+        return Tool.calcAbsAngle(getV(n), new Vector(getVBack(n),Math.PI));
     }
 
     boolean equals(Piece p) {
@@ -101,7 +128,7 @@ public class Frame {
                 boolean flg = true;
                 for(int j=0;j<p.num;j++) {
     //                if(!Tool.hasAccuracy(this.vectors[(i+j)%this.num].length, p.vectors[j].length)) {
-                    if(!Tool.hasAccuracy(this.get((i+j)%num).length, p.get(j).length)) {
+                    if(!Tool.hasAccuracy(this.getV((i+j)%num).length, p.getV(j).length)) {
                         flg = false;
                         break;
                     }
@@ -116,7 +143,7 @@ public class Frame {
         String s = "";
         s += num;
         for(int i=0;i<num;i++) {
-            s += String.format("\n%f %f", coords.get(i).x, coords.get(i).y);
+            s += String.format("\n%f %f", getC(i).x, getC(i).y);
         }
         return s;
     }
@@ -127,7 +154,7 @@ public class Frame {
 //            s += i.toString() + " ";
 //        }
         for(int i=0;i<num;i++)
-            s += get(i).toString() + " ";
+            s += getV(i).toString() + " ";
         return s;
     }
 }

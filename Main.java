@@ -18,6 +18,7 @@ public class Main {
     }
 
     public static void solve_by_rec(Solver first) {
+        System.out.println(first.toExString());
         solve_rec(first);
         end = System.nanoTime();
         System.out.println("Time:" + (end - start) / 1000000f + "ms");
@@ -27,9 +28,9 @@ public class Main {
 
     public static void solve_rec(Solver now) {
         count++;
-        System.out.println(count);
-        System.out.println(now.toExString());
-//        System.out.println(now.toStringForRead()+"\n");
+        System.out.println(now.fixed.size() + "\t" + count);
+//        System.out.println(now.toExString());
+        System.out.println(now.toStringForRead()+"\n");
         if(now.isFinished() == true) {
             end = System.nanoTime();
             System.out.println("Time:" + (end - start) / 1000000f + "ms");
@@ -40,8 +41,9 @@ public class Main {
         for(int i=0;i<now.frame.num;i++) {
             for(int j=0;j<now.data.size();j++) {
                 for(int k=0;k<now.data.get(j).num;k++) {
+//                    System.out.printf("%d %d %d\n", i, j, k);
                     if(now.canPut(i,j,k) == true) {
-                        System.out.println("Yattaze!");
+//                        System.out.println("Yattaze!");
                         Solver tmp = now.clone();
                         tmp.put(i,j,k);
                         solve_rec(tmp);

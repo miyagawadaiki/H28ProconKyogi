@@ -37,16 +37,16 @@ public class Piece {
 
     public Piece(Piece p1, Piece p2, int p1_idx, int p2_idx, int n) {
         this(n);
-        p2 = new Piece(p2, Tool.calcAngle(p1.get(p1_idx), p2.get(p2_idx))+Math.PI);
+        p2 = new Piece(p2, Tool.calcAngle(p1.getV(p1_idx), p2.getV(p2_idx))+Math.PI);
 
-        Vector v_p12 = new Vector(p1.getBack(p1_idx), p2.getNext(p2_idx));
-        Vector v_p21 = new Vector(p2.getBack(p2_idx), p1.getNext(p1_idx));
+        Vector v_p12 = new Vector(p1.getVBack(p1_idx), p2.getVNext(p2_idx));
+        Vector v_p21 = new Vector(p2.getVBack(p2_idx), p1.getVNext(p1_idx));
 
         int index = 0;
         int pi = (p1_idx+2)%p1.num;
         while(true) {
             if(pi == p1.getBackIdx(p1_idx)) break;
-            this.set(index++, p1.get(pi));
+            this.set(index++, p1.getV(pi));
             pi = (pi+1)%p1.num;
         }
 
@@ -57,7 +57,7 @@ public class Piece {
             if(pi == p2.getBackIdx(p2_idx)) break;
 //            System.out.printf("p2_%d:%s\n",pi,p1.vectors[pi]);
 //            this.vectors[index++] = p2.vectors[pi];
-            this.set(index++, p2.get(pi));
+            this.set(index++, p2.getV(pi));
             pi = (pi+1)%p2.num;
         }
 
@@ -90,7 +90,7 @@ public class Piece {
         coords[n] = new Coord(coords[getBackIdx(n)], v);
     }
 
-    Vector get(int n) {
+    Vector getV(int n) {
         if(n > num)
             throw new IllegalArgumentException("no such vector in this Piece : \n" + this.toString() + "\n");
 //        return vectors[n];
@@ -100,14 +100,26 @@ public class Piece {
         return new Vector(new Vector(coords[n], coords[getNextIdx(n)]), theta);
     }
 
-    Vector getBack(int n) {
+    Vector getVBack(int n) {
 //        return vectors[getBackIdx(n)];
-        return get(getBackIdx(n));
+        return getV(getBackIdx(n));
     }
 
-    Vector getNext(int n) {
+    Vector getVNext(int n) {
 //        return vectors[getNextIdx(n)];
-        return get(getNextIdx(n));
+        return getV(getNextIdx(n));
+    }
+
+    Coord getC(int n) {
+        return coords[n];
+    }
+
+    Coord getCBack(int n) {
+        return getC(getBackIdx(n));
+    }
+
+    Coord getCNext(int n) {
+        return getC(getNextIdx(n));
     }
 
     int getBackIdx(int n) {
@@ -119,7 +131,7 @@ public class Piece {
     }
 
     double getAngle(int n) {
-        return Tool.calcAbsAngle(get(n), new Vector(getBack(n),Math.PI));
+        return Tool.calcAbsAngle(getV(n), new Vector(getVBack(n),Math.PI));
     }
 
     void read(Scanner stdIn) {
@@ -163,15 +175,15 @@ public class Piece {
 //        for(Vector v : vectors)
 //            s += v.length;
         for(int i=0;i<num;i++)
-            s += get(i).length;
+            s += getV(i).length;
         return s;
     }
 
         //TODO
     void countUpDent() {
-        Vector v1,v2 = get(0);
+        Vector v1,v2 = getV(0);
         for(int i=0;i<num;i++) {
-            v1 = v2; v2 = getNext(i);
+            v1 = v2; v2 = getVNext(i);
 //            System.out.println(Tool.calcAngle(v1,v2));
             if(Tool.calcAngle(v1,v2) < 0) {
                 dents[dent_cnt++] = i;
@@ -182,8 +194,8 @@ public class Piece {
     void calcMax() {
         Vector mx = new Vector(0,0);
         for(int i=0;i<coords.length;i++) {
-            if(get(i).length > mx.length)
-                mx = get(i);
+            if(getV(i).length > mx.length)
+                mx = getV(i);
         }
         max = mx.length;
     }
@@ -191,8 +203,8 @@ public class Piece {
     void calcError() {
         double x = 0, y = 0;
         for(int i=0;i<num;i++) {
-            x += get(i).dx;
-            y += get(i).dy;
+            x += getV(i).dx;
+            y += getV(i).dy;
         }
         Vector tmp = new Vector(x,y);
         error = tmp.length;
@@ -207,7 +219,7 @@ public class Piece {
                 boolean flg = true;
                 for(int j=0;j<p.num;j++) {
 //                    if(!Tool.hasAccuracy(this.vectors[(i+j)%this.num].length, p.vectors[j].length)) {
-                    if(!Tool.hasAccuracy(get((i+j)%num).length, p.get(j).length)) {
+                    if(!Tool.hasAccuracy(getV((i+j)%num).length, p.getV(j).length)) {
                         flg = false;
                         break;
                     }
@@ -248,7 +260,7 @@ public class Piece {
 //            s += i.toString() + " ";
 //        }
         for(int i=0;i<num;i++)
-            s += get(i).toString() + " ";
+            s += getV(i).toString() + " ";
         return s;
     }
 }
