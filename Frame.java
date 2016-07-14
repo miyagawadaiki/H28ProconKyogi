@@ -17,7 +17,7 @@ public class Frame {
         this(copy.num);
         for(int i=0;i<num;i++)
 //            this.vectors[i] = copy.vectors[i].clone();
-            this.coords.add(copy.getC(i).clone());
+            this.coords.add(copy.getCL(i).clone());
         this.max = copy.max;
     }
 
@@ -64,7 +64,7 @@ public class Frame {
         if(n > num)
             throw new IllegalArgumentException("no such vector in this Piece : \n" + this.toString() + "\n");
 //        return vectors[n];
-        return new Vector(getC(n),getCNext(n));
+        return new Vector(getCL(n),getCLNext(n));
     }
 
     Vector getVBack(int n) {
@@ -77,6 +77,14 @@ public class Frame {
         return getV(getNextIdx(n));
     }
 
+    Vector getPV(int n) {
+        Vector v = new Vector();
+        for(int i=0;i<n;i++) {
+            v = new Vector(v,getV(i));
+        }
+        return v;
+    }
+
     int getBackIdx(int n) {
         return (num + n - 1) % num;
     }
@@ -85,16 +93,16 @@ public class Frame {
         return (n+1) % num;
     }
 
-    Coord getC(int n) {
+    Coord getCL(int n) {
         return coords.get(n);
     }
 
-    Coord getCBack(int n) {
-        return getC(getBackIdx(n));
+    Coord getCLBack(int n) {
+        return getCL(getBackIdx(n));
     }
 
-    Coord getCNext(int n) {
-        return getC(getNextIdx(n));
+    Coord getCLNext(int n) {
+        return getCL(getNextIdx(n));
     }
 
     double totalLength() {
@@ -117,6 +125,13 @@ public class Frame {
 
     double getAngle(int n) {
         return Tool.calcAbsAngle(getV(n), new Vector(getVBack(n),Math.PI));
+    }
+
+    int contain(Coord t) {
+        for(int i=0;i<num;i++) {
+            if(getCL(i).equals(t)) return i;
+        }
+        return -1;
     }
 
     boolean equals(Piece p) {
@@ -143,7 +158,7 @@ public class Frame {
         String s = "";
         s += num;
         for(int i=0;i<num;i++) {
-            s += String.format("\n%f %f", getC(i).x, getC(i).y);
+            s += String.format("\n%f %f", getCL(i).x, getCL(i).y);
         }
         return s;
     }

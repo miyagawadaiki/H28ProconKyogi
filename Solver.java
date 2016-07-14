@@ -17,6 +17,8 @@ public class Solver {
         this();
         for(Piece p : copy.data)
             this.data.add(p.clone());
+        for(Piece p : copy.fixed)
+            this.fixed.add(p.clone());
         this.frame = copy.frame.clone();
     }
 
@@ -46,8 +48,8 @@ public class Solver {
     public boolean isFinished() {
 //        if(data.size() > 1) return false;
 //        else if(frame.equals(data.get(0))) return true;
-        if(data.size() > 0 && frame.equals(data.get(0))) return true;
         if(Tool.hasAccuracy(frame.totalLength(),0.0) == true) return true;
+//        if(data.size() > 0 && frame.equals(data.get(0))) return true;
         return false;
     }
 
@@ -82,16 +84,64 @@ public class Solver {
     }
 
     public void put(int fv_i, int dp_i, int pv_i) {
+        Piece p = data.get(dp_i);
+        Vector pv = frame.getPV(fv_i);
+        p.ref = pv.clone();
+        Frame tmp = frame.clone();
+//        Coord c = p.getCLBack(fv_i);
+        int i_f = frame.getNextIdx(fv_i);
+        int i_p = pv_i;
+//        frame.remove(fv_i);
+//        for(int i=0;i<p.num-1;i++,idx = p.getBackIdx(idx)) {
+        for(int i=0;i<p.num;i++,i_p = p.getBackIdx(i_p)) {
+            int t = frame.contain(p.getCW(i_p));
+
+            if(t >= 0) {
+                if(Tool.hasAccuracy(tmp.getAngle(tmp.contain(p.getCW(i_p))), p.getAngle(i_p))) {
+//                    System.out.printf("case1 f_%d p_%d\n", t, i_p);
+                    frame.remove(t);
+                    i_f = t;
+                }
+                else {
+//                    System.out.printf("case2 f_%d p_%d\n", t, i_p);
+                    i_f = frame.getNextIdx(t);
+                }
+            }
+            else {
+//                System.out.printf("case3 f_%d p_%d\n", i_f, i_p);
+                frame.add(i_f, new Coord(new Coord(pv), p.getPV(i_p)));
+                i_f = frame.getNextIdx(i_f);
+            }
+/*
+            int t;
+//            if((t = frame.contain(c)) >=  0) {
+            if((t = frame.contain(p.getCL(i_p))) >=  0) {
+                frame.remove(t);
+                if(Tool.hasAccuracy(frame.getAngle(t),p.getAngle(i_p)) == true) {
+                    i_f = frame.getBackIdx(t);
+                    continue;
+                }
+            }
+            frame.add(i_f, new Coord(new Coord(pv), p.getPV(i_p)));
+            i_f = frame.getNextIdx(i_f);
+*/
+        }
+        fixed.add(p.clone());
+        data.remove(dp_i);
+    }
+
+/*
+    public void put(int fv_i, int dp_i, int pv_i) {
 //        System.out.println(this.toString());
         Piece p = data.get(dp_i);
-//        frame.add(fv_i,new Coord(frame.getC(frame.getBackIdx(fv_i)), new Vector(frame.getVBack(fv_i),new Vector(p.getVBack(pv_i),Math.PI))));
+//        frame.add(fv_i,new Coord(frame.getCL(frame.getBackIdx(fv_i)), new Vector(frame.getVBack(fv_i),new Vector(p.getVBack(pv_i),Math.PI))));
         if(Tool.hasAccuracy(frame.getVBack(fv_i).length, p.getVBack(pv_i).length) == false)
-            frame.add(fv_i,new Coord(frame.getCBack(fv_i), new Vector(frame.getVBack(fv_i),new Vector(p.getVBack(pv_i),Math.PI))));
+            frame.add(fv_i,new Coord(frame.getCLBack(fv_i), new Vector(frame.getVBack(fv_i),new Vector(p.getVBack(pv_i),Math.PI))));
 //        System.out.println(this.toString());
 //        System.out.println(this.toStringForRead());
-//        frame.add(fv_i+2,new Coord(frame.getC(fv_i), new Vector(frame.getV(fv_i),new Vector(p.getV(pv_i),Math.PI))));
+//        frame.add(fv_i+2,new Coord(frame.getCL(fv_i), new Vector(frame.getV(fv_i),new Vector(p.getV(pv_i),Math.PI))));
         if(Tool.hasAccuracy(frame.getV(fv_i).length, p.getV(pv_i).length) == false)
-            frame.add(fv_i+2,new Coord(frame.getC(fv_i+1), p.getV(pv_i)));
+            frame.add(fv_i+2,new Coord(frame.getCL(fv_i+1), p.getV(pv_i)));
 //        System.out.println(this.toString());
 //        System.out.println(this.toStringForRead());
         frame.remove(fv_i+1);
@@ -101,7 +151,7 @@ public class Solver {
         for(int i=1;i<=data.get(dp_i).num-3;i++) {
             int tmp = p_i;
             p_i = p.getBackIdx(p_i);
-            frame.add(fv_i+i, new Coord(frame.getC(fv_i+i-1),new Vector(p.getC(tmp),p.getC(p_i))));
+            frame.add(fv_i+i, new Coord(frame.getCL(fv_i+i-1),new Vector(p.getCL(tmp),p.getCL(p_i))));
 //            System.out.println(this.toString());
 //            System.out.println(this.toStringForRead());
         }
@@ -114,6 +164,7 @@ public class Solver {
         fixed.add(p.clone());
         data.remove(dp_i);
     }
+*/
 
     public String toStringForRead() {
         String s = "";

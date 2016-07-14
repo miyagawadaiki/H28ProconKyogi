@@ -110,16 +110,36 @@ public class Piece {
         return getV(getNextIdx(n));
     }
 
-    Coord getC(int n) {
+    Vector getPV(int n) {
+        Vector v = new Vector();
+        for(int i=0;i<n;i++) {
+            v = new Vector(v,getV(i));
+        }
+        return v;
+    }
+
+    Coord getCL(int n) {
         return coords[n];
     }
 
-    Coord getCBack(int n) {
-        return getC(getBackIdx(n));
+    Coord getCLBack(int n) {
+        return getCL(getBackIdx(n));
     }
 
-    Coord getCNext(int n) {
-        return getC(getNextIdx(n));
+    Coord getCLNext(int n) {
+        return getCL(getNextIdx(n));
+    }
+
+    Coord getCW(int n) {
+        return new Coord(getCL(n), ref);
+    }
+
+    Coord getCWBack(int n) {
+        return getCW(getBackIdx(n));
+    }
+
+    Coord getCWNext(int n) {
+        return getCW(getNextIdx(n));
     }
 
     int getBackIdx(int n) {

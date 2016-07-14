@@ -28,6 +28,10 @@ public class Coord {
         return new Coord(this);
     }
 
+    public boolean equals(Coord t) {
+        return Tool.hasAccuracy(this.x, t.x) && Tool.hasAccuracy(this.y, t.y);
+    }
+
     public String toString() {
         return String.format("(%10f,%10f)", x, y);
     }
