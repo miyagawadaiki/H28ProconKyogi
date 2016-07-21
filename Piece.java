@@ -3,7 +3,7 @@ import java.util.*;
 public class Piece {
     int num;
     double theta;
-    Vector ref;
+    Vector p_vec;
     Coord c;
     Coord[] coords;
     int dent_cnt;
@@ -15,7 +15,7 @@ public class Piece {
     public Piece(int num) {
         this.num = num;
         theta = 0.0;
-        ref = new Vector();
+        p_vec = new Vector();
         c = new Coord();
         coords = new Coord[num];
 //        vectors = new Vector[num];
@@ -71,6 +71,7 @@ public class Piece {
     public Piece(Piece copy) {
         this(copy.num);
         this.theta = copy.theta;
+        this.p_vec = copy.p_vec.clone();
         this.c = copy.c.clone();
         for(int i=0;i<num;i++)
 //            this.vectors[i] = copy.vectors[i].clone();
@@ -111,12 +112,22 @@ public class Piece {
     }
 
     Vector getPV(int n) {
+        return new Vector(new Vector(getCL(n)), theta);
+    }
+
+    Vector getPVW(int n) {
+        return new Vector(new Vector(getCW(n)), theta);
+    }
+
+/*
+    Vector getPV(int n) {
         Vector v = new Vector();
         for(int i=0;i<n;i++) {
             v = new Vector(v,getV(i));
         }
         return v;
     }
+*/
 
     Coord getCL(int n) {
         return coords[n];
@@ -131,7 +142,7 @@ public class Piece {
     }
 
     Coord getCW(int n) {
-        return new Coord(getCL(n), ref);
+        return new Coord(getCL(n), p_vec);
     }
 
     Coord getCWBack(int n) {
@@ -189,6 +200,10 @@ public class Piece {
             v = new Vector(v,-1.0,1.0);
     }
 */
+
+    void calcArea() {
+        
+    }
 
     double totalLength() {
         double s = 0;
@@ -252,7 +267,7 @@ public class Piece {
 
     public String toStringForRead() {
         String s = "";
-        s += String.format("%d %f %f %f", num, ref.dx, ref.dy, theta);
+        s += String.format("%d %f %f %f", num, p_vec.dx, p_vec.dy, theta);
         for(int i=0;i<num;i++) {
             s += String.format("\n%f %f", coords[i].x, coords[i].y);
         }
@@ -275,7 +290,7 @@ public class Piece {
 
     public String toString() {
         String s = "";
-        s += String.format("{[%.4f,%.4f],%.4f}\n\t", ref.dx, ref.dy, theta);
+        s += String.format("{[%.4f,%.4f],%.4f}\n\t", p_vec.dx, p_vec.dy, theta);
 //        for(Vector i : vectors) {
 //            s += i.toString() + " ";
 //        }

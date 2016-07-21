@@ -78,12 +78,18 @@ public class Frame {
     }
 
     Vector getPV(int n) {
+        return new Vector(getCL(n));
+    }
+
+/*
+    Vector getPV(int n) {
         Vector v = new Vector();
         for(int i=0;i<n;i++) {
             v = new Vector(v,getV(i));
         }
         return v;
     }
+*/
 
     int getBackIdx(int n) {
         return (num + n - 1) % num;
@@ -160,6 +166,19 @@ public class Frame {
         for(int i=0;i<num;i++) {
             s += String.format("\n%f %f", getCL(i).x, getCL(i).y);
         }
+        return s;
+    }
+
+    public String toExString() {
+        String s = "";
+        s += String.format("[%2d]", num);
+        s += "\t(";
+        for(int i=0;i<num;i++) {
+            if(i > 0) s += " ";
+            s += String.format("%f", Math.toDegrees(getAngle(i)));
+        }
+        s += ")\n\t";
+        s += this.toString();
         return s;
     }
 

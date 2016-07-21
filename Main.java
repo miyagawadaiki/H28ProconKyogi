@@ -7,7 +7,9 @@ public class Main {
 
 ///*
     public static void main(String[] args) {
-//        System.out.println(Tool.hasIntersection(new Vector(3,3),new Vector(0,0),new Vector(-5,2),new Vector(5,-2)));
+//        System.out.println(Tool.hasIntersection(new Vector(5,0),new Vector(0,0),new Vector(1,2),new Vector(2,0)));
+//        System.out.println((new Vector(2.0,-4.0)).reverse());
+        System.out.println(Tool.calcArea(new Vector(1,1),new Vector(1,0)));
         Solver first = new Solver();
         first.read();
         solve_by_rec(first);
@@ -41,9 +43,9 @@ public class Main {
         for(int i=0;i<now.frame.num;i++) {
             for(int j=0;j<now.data.size();j++) {
                 for(int k=0;k<now.data.get(j).num;k++) {
-//                    System.out.printf("%d %d %d\n", i, j, k);
+                    System.out.printf("%d %d %d\n", i, j, k);
                     if(now.canPut(i,j,k) == true) {
-//                        System.out.println("Yattaze!");
+                        System.out.println("Yattaze!");
                         Solver tmp = now.clone();
                         tmp.put(i,j,k);
                         solve_rec(tmp);

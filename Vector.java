@@ -36,6 +36,10 @@ public class Vector {
         this(v.dx * a, v.dy * b);
     }
 
+    public Vector(Coord p) {
+        this(p.x, p.y);
+    }
+
     public Vector(Vector copy) {
         this(copy.dx, copy.dy);
     }
@@ -47,6 +51,10 @@ public class Vector {
 
     public void calcLength() {
         length = Math.sqrt(dx*dx + dy*dy);
+    }
+
+    public Vector reverse() {
+        return new Vector(this.dx * -1, this.dy * -1);
     }
 
     public boolean equals(Vector v) {

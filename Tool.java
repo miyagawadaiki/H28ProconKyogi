@@ -12,15 +12,45 @@ public class Tool {
     }
 
     static boolean hasIntersection(Vector v, Vector p_v, Vector w, Vector p_w) {
+        double ds, dg;
+        if(v.dx == 0.0) {
+//            if(v.dy > 0) {
+//                if()
+//            }
+            ds = v.dx - p_v.dx;
+            dg = w.dx - p_v.dx;
+            return (ds * dg != 0) && ((ds > 0)?1:-1) * ((dg > 0)?1:-1) < 0;
+        }
+        else if(v.dy == 0.0) {
+            ds = v.dy - p_v.dy;
+            dg = w.dy - p_v.dy;
+            return (ds * dg != 0) && ((ds > 0)?1:-1) * ((dg > 0)?1:-1) < 0;
+        }
+//        else {
+//
+//        }
+        return false;
+    }
+
+///*
+    static boolean hasOverlap(Vector v, Vector p_v, Vector w, Vector p_w) {
         double a = v.dy / v.dx;
         double b = p_v.dy - a * p_v.dx;
         Vector t = new Vector(w,p_w);
-        if((((p_w.dy - a * p_w.dx - b) > 0)?1:-1) * (((t.dy - a * t.dx - b) > 0)?1:-1) > 0)
+        double ds = 0, dg = 0;
+        ds = p_w.dy - a * p_w.dx - b;   dg = t.dy - a * t.dx - b;
+        if(!hasAccuracy(ds * dg,0) && ((ds > 0)?1:-1) * ((dg > 0)?1:-1) > 0)
             return false;
         a = w.dy / w.dx;
         b = p_w.dy - a * p_w.dx;
         t = new Vector(v,p_v);
-        return ((((p_v.dy - a * p_v.dx - b) > 0)?1:-1) * (((t.dy - a * t.dx - b) > 0)?1:-1) < 0);
+        ds = p_v.dy - a * p_v.dx - b;   dg = t.dy - a * t.dx - b;
+        return (!hasAccuracy(ds * dg,0) && ((ds > 0)?1:-1) * ((dg > 0)?1:-1) < 0);
+    }
+//*/
+
+    static double calcArea(Vector a, Vector b) {
+        return Math.abs(a.length * b.length * Math.sin(calcAbsAngle(a,b))) / 2;
     }
 
         // 2つのベクトル間の角度をラジアンで返す

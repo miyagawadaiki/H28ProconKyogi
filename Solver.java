@@ -17,8 +17,8 @@ public class Solver {
         this();
         for(Piece p : copy.data)
             this.data.add(p.clone());
-        for(Piece p : copy.fixed)
-            this.fixed.add(p.clone());
+        for(Piece q : copy.fixed)
+            this.fixed.add(q.clone());
         this.frame = copy.frame.clone();
     }
 
@@ -59,35 +59,119 @@ public class Solver {
         }
     }
 
+    public Vector getWorldPV(int fv_i, int dp_i, int pv_i) {
+        return new Vector(frame.getPV(fv_i), data.get(dp_i).getPV(pv_i).reverse());
+    }
+
         // fv_i : index of coords in the frame
         // dp_i : index of piece in the data
         // pv_i : index of coords in the piece
     public boolean canPut(int fv_i, int dp_i, int pv_i) {
+//        System.out.printf("%f\t%f\n", frame.getAngle(fv_i), data.get(dp_i).getAngle(pv_i));
         if(Tool.hasAccuracy(frame.getAngle(fv_i),data.get(dp_i).getAngle(pv_i)) == false)
             return false;
-//        System.out.print("Yattaze");
-        data.get(dp_i).rotate(Tool.calcAngle(data.get(dp_i).getV(pv_i), frame.getV(fv_i)));
-        Vector v_sf = new Vector();
+//        System.out.print("Yattaze in Solver.canPut():1");
+        Piece p = new Piece(data.get(dp_i), Tool.calcAngle(data.get(dp_i).getV(pv_i), frame.getV(fv_i)));
+        System.out.println("theta=" + Tool.calcAngle(data.get(dp_i).getV(pv_i), frame.getV(fv_i)));
+        p.p_vec = getWorldPV(fv_i, dp_i, pv_i);
+        System.out.println(p.toExString());
+//        System.out.println(this.toExString());
+//        data.get(dp_i).rotate(Tool.calcAngle(data.get(dp_i).getV(pv_i), frame.getV(fv_i)));
+
+
+//        for(int i=0;i<p.num;i++) {
+//            if(isInArea(p.getV(i), p.getPVW(i)) == false) {
+//                System.out.println("Missed : " + p.getV(i));
+//                return false;
+//            }
+//        }
+///*
         for(int i=0;i<frame.num;i++) {
-            Vector v_sp = v_sf.clone();
-            for(int j=0;j<data.get(dp_i).num;j++) {
-                if(Tool.hasIntersection(frame.getV(i), v_sf, data.get(dp_i).getV(j), v_sp) == true) {
-//                    System.out.printf(" %s %s\n", frame.getV(i), data.get(dp_i).getV(j));
+//            Vector v_sp = v_sf.clone();
+//            for(int j=0;j<data.get(dp_i).num;j++) {
+            for(int j=0;j<p.num;j++) {
+//                if(Tool.hasOverlap(frame.getV(i), v_sf, data.get(dp_i).getV(j), v_sp) == true) {
+//                if(Tool.hasIntersection(frame.getV(i), frame.getPV(i), p.getV(j), new Vector(p.getCW(j))) == true) {
+                if(Tool.hasOverlap(frame.getV(i), frame.getPV(i), p.getV(j), new Vector(p.getCW(j))) == true) {
+                    System.out.printf(" %s %s %s %s\n", frame.getV(i), frame.getPV(i), p.getV(j), new Vector(p.getCW(j)));
                     return false;
                 }
-                v_sp = new Vector(v_sp, data.get(dp_i).getV(j));
+//                v_sp = new Vector(v_sp, data.get(dp_i).getV(j));
+//                v_sp = new Vector(v_sp, p.getV(j));
+//                v_sp = new Vector(v_sp, p.getPV(j));
             }
-            v_sf = new Vector(v_sf, frame.getV(i));
+//            v_sf = new Vector(v_sf, frame.getV(i));
+//            v_sf = new Vector(v_sf, frame.getV(i));
         }
+
+
+//*/
 //        System.out.println("Yattaze");
         return true;
     }
 
+    public boolean isInArea(Piece p) {
+        for(int i=0;i<p.num;i++) {
+            Vector pv = p.getV(i), pp = p.getPVW(i);
+            double scx = pp.dx, scy = pp.dy;
+            double gcx = pp.dx + pv.dx, gcy = pp.dy + pv.dy;
+
+            for(int j=0;j<frame.num;j++) {
+                Vector fv = frame.getV(j), fp = frame.getPV(j);
+                if(fv.dx == 0) {
+                    if(fv.dy > 0) {
+                        if(scx <= fp.dx && gcx <= fp.dx) continue;
+                        System.out.println("case1:" + pv + pp + fv + fp);
+                        return false;
+                    }
+                    else if(fv.dy < 0) {
+                        if(scx >= fp.dx && gcx >= fp.dx) continue;
+                        System.out.println("case2:" + pv + pp + fv + fp);
+                        return false;
+                    }
+                }
+                else if(fv.dy == 0) {
+                    if(fv.dx > 0) {
+                        if(scy >= fp.dy && gcy >= fp.dy) continue;
+                        System.out.println("case3:" + pv + pp + fv + fp);
+                        return false;
+                    }
+                    else if(fv.dx < 0) {
+                        if(scy <= fp.dy && gcy <= fp.dy) continue;
+                        System.out.println("case4:" + pv + pp + fv + fp);
+                        return false;
+                    }
+                }
+                else {
+                    double a = fv.dy / fv.dx;
+                    double b = fp.dy - a * fp.dx;
+                    double ds = scy - a * scx - b;
+                    double dg = gcy - a * gcx - b;
+                    if(fv.dx > 0) {
+                        if(ds >= 0 && dg >= 0) continue;
+                        System.out.println("case5:" + pv + pp + fv + fp);
+                        return false;
+                    }
+                    else if(fv.dx < 0) {
+                        if(ds <= 0 && dg <= 0) continue;
+                        System.out.println("case6:" + pv + pp + fv + fp);
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
     public void put(int fv_i, int dp_i, int pv_i) {
+        data.get(dp_i).rotate(Tool.calcAngle(data.get(dp_i).getV(pv_i), frame.getV(fv_i)));
         Piece p = data.get(dp_i);
-        Vector pv = frame.getPV(fv_i);
-        p.ref = pv.clone();
+//        p.p_vec = f_pv.clone();
+        p.p_vec = getWorldPV(fv_i, dp_i, pv_i);
+//        System.out.println(p.toExString());
+//        System.out.println(this.toExString());
         Frame tmp = frame.clone();
+//        System.out.println(frame +"\n"+ tmp);
 //        Coord c = p.getCLBack(fv_i);
         int i_f = frame.getNextIdx(fv_i);
         int i_p = pv_i;
@@ -95,22 +179,26 @@ public class Solver {
 //        for(int i=0;i<p.num-1;i++,idx = p.getBackIdx(idx)) {
         for(int i=0;i<p.num;i++,i_p = p.getBackIdx(i_p)) {
             int t = frame.contain(p.getCW(i_p));
+//            int t = tmp.contain(p.getCW(i_p));
 
             if(t >= 0) {
                 if(Tool.hasAccuracy(tmp.getAngle(tmp.contain(p.getCW(i_p))), p.getAngle(i_p))) {
 //                    System.out.printf("case1 f_%d p_%d\n", t, i_p);
                     frame.remove(t);
                     i_f = t;
+//                    System.out.println(frame);
                 }
                 else {
 //                    System.out.printf("case2 f_%d p_%d\n", t, i_p);
                     i_f = frame.getNextIdx(t);
+//                    System.out.println(frame);
                 }
             }
             else {
 //                System.out.printf("case3 f_%d p_%d\n", i_f, i_p);
-                frame.add(i_f, new Coord(new Coord(pv), p.getPV(i_p)));
+                frame.add(i_f, new Coord(new Coord(p.p_vec), p.getPV(i_p)));
                 i_f = frame.getNextIdx(i_f);
+//                System.out.println(frame);
             }
 /*
             int t;
@@ -156,11 +244,11 @@ public class Solver {
 //            System.out.println(this.toStringForRead());
         }
         frame.num = frame.coords.size();
-        Vector ref = new Vector();
+        Vector p_vec = new Vector();
         for(int i=0;i<fv_i;i++) {
-            ref = new Vector(ref, frame.getV(i));
+            p_vec = new Vector(p_vec, frame.getV(i));
         }
-        p.ref = ref.clone();
+        p.p_vec = p_vec.clone();
         fixed.add(p.clone());
         data.remove(dp_i);
     }
@@ -179,7 +267,7 @@ public class Solver {
     public String toExString() {
         String s = "";
         s += "f:\n";
-        s += frame.toString() + "\n";
+        s += frame.toExString() + "\n";
         s += "p:\n";
         for(int i=0;i<data.size();i++)
             s += String.format("<%d> %s\n",i,data.get(i).toExString());
