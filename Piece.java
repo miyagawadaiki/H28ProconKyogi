@@ -1,5 +1,10 @@
 import java.util.*;
 
+//////////////////////////////////
+//  Pieceクラス : ピースの情報を持つ
+//  フィールド
+//      num : 頂点の数
+/////////////////////////////////
 public class Piece {
     int num;
     double theta;
@@ -35,8 +40,8 @@ public class Piece {
 //        System.out.printf("turn\n%f\n%s\n",theta,this);
     }
 
-    public Piece(Piece p1, Piece p2, int p1_idx, int p2_idx, int n) {
-        this(n);
+    public Piece(Piece p1, Piece p2, int p1_idx, int p2_idx) {
+        this(p1.num - 3 + p2.num - 3 + 2);
         p2 = new Piece(p2, Tool.calcAngle(p1.getV(p1_idx), p2.getV(p2_idx))+Math.PI);
 
         Vector v_p12 = new Vector(p1.getVBack(p1_idx), p2.getVNext(p2_idx));
@@ -202,7 +207,7 @@ public class Piece {
 */
 
     void calcArea() {
-        
+
     }
 
     double totalLength() {

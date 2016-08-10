@@ -130,6 +130,7 @@ public class Tool {
     }
 
     static Piece fuse(Piece p1, Piece p2, int p1_idx, int p2_idx) {
-        return new Piece(p1,p2,p1_idx,p2_idx,p1.num-3+p2.num-3+2);
+//        return new PieceConnected(p1,p2,p1_idx,p2_idx);
+        return new Piece(p1,p2,p1_idx,p2_idx);
     }
 }

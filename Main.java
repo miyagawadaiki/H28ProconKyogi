@@ -9,16 +9,23 @@ public class Main {
     public static void main(String[] args) {
 //        System.out.println(Tool.hasIntersection(new Vector(5,0),new Vector(0,0),new Vector(1,2),new Vector(2,0)));
 //        System.out.println((new Vector(2.0,-4.0)).reverse());
-        System.out.println(Tool.calcArea(new Vector(1,1),new Vector(1,0)));
+//        System.out.println(Tool.calcArea(new Vector(1,1),new Vector(1,0)));
+
+
+        // パズルの初期状態を作成
         Solver first = new Solver();
         first.read();
-        solve_by_rec(first);
+
+        // 再帰により解く
+//        solve_by_rec(first);
 //        reduce_piece_by_stack(first);
-        System.out.println("\n\n\n\n");
-        count = 0;
-//        reduce_piece_by_rec(first);
+//        System.out.println("\n\n\n\n");
+//        count = 0;
+        reduce_piece_by_rec(first);
     }
 
+
+    // 深さ優先探索（再帰ver）でピースを枠に置いていく
     public static void solve_by_rec(Solver first) {
         System.out.println(first.toExString());
         solve_rec(first);
@@ -28,6 +35,7 @@ public class Main {
         System.out.println("Damedaze! in solve_by_rec()");
     }
 
+    // solve_by_rec() で使う再帰関数
     public static void solve_rec(Solver now) {
         count++;
         System.out.println(now.fixed.size() + "\t" + count);
@@ -55,6 +63,8 @@ public class Main {
         }
     }
 
+
+    // ピース数を減らす（再帰ver.）
     public static void reduce_piece_by_rec(Solver first) {
         start = System.nanoTime();
         reduce_rec(first);
@@ -64,6 +74,7 @@ public class Main {
         System.out.println("Damedaze! in reduce_piece_by_rec()");
     }
 
+    // ピース数を減らす（再帰ver.）
     public static void reduce_piece_by_stack(Solver first) {
         start = System.nanoTime();
         Stack<Solver> temp = new Stack<Solver>();
@@ -125,6 +136,7 @@ public class Main {
 
     }
 
+    // reduce_piece_by_rec()用の再帰関数
     static void reduce_rec(Solver now) {
 //        if(count >= 50) System.exit(1);
         count++;
