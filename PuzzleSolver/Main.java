@@ -149,7 +149,7 @@ public class Main {
             System.out.println("finished!!!!!!!!!!!!!!!!!");
             System.out.println("Time:" + (end - start) / 1000000f + "ms");
             System.out.println(count);
-            System.out.println(now);
+            System.out.println(now.toString());
             System.exit(1);
         }
         for(int i=0;i<now.data.size();i++) {

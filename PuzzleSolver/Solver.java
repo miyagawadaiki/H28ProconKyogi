@@ -46,9 +46,9 @@ public class Solver {
     }
 
     public boolean isFinished() {
-//        if(data.size() > 1) return false;
-//        else if(frame.equals(data.get(0))) return true;
-        if(Tool.hasAccuracy(frame.totalLength(),0.0) == true) return true;
+        if(data.size() > 1) return false;
+        else if(frame.equals(data.get(0))) return true;
+//        if(Tool.hasAccuracy(frame.totalLength(),0.0) == true) return true;
 //        if(data.size() > 0 && frame.equals(data.get(0))) return true;
         return false;
     }
