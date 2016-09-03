@@ -49,18 +49,21 @@ public class PieceConnected extends Piece {
         this.relative_vec = copy.relative_vec.clone();
     }
 
+    @Override
     public String toStringForRead() {
         String s = "";
         s += parts[0].toStringForRead() + "\n" + parts[1].toStringForRead();
         return s;
     }
 
+    @Override
     public String toExString() {
         String s = "";
         s += parts[0].toExString() + "\n" + parts[1].toExString();
         return s;
      }
 
+    @Override
     public String toString() {
         String s = "";
         s += parts[0].toString() + "\n" + parts[1].toString();
