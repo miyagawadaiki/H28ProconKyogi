@@ -38,7 +38,7 @@ public class Vector extends Pair {
     }
 
     public Vector move(State state) {
-        return new Vector(plus(state.vector),state.angle);
+        return new Vector(this,state.angle);
     }
 
     public double length() {

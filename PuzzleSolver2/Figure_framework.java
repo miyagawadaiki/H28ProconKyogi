@@ -60,7 +60,7 @@ public class Figure_framework implements Figure_interface {
     public Line getLineB(int n) { return getLine(getIdxB(n)); }
     public Line getLineN(int n) { return getLine(getIdxN(n)); }
 
-    public Line getWLine(int n) {  return new Line(getWVec(n),getWCrd(n)); }
+    public Line getWLine(int n) {  return new Line(getWCrd(n),getWCrdN(n)); }
     public Line getWLineB(int n) { return getWLine(getIdxB(n)); }
     public Line getWLineN(int n) { return getWLine(getIdxN(n)); }
 
@@ -86,7 +86,13 @@ public class Figure_framework implements Figure_interface {
 
     public int searchCrd(Coord c) {
         for(int i=0;i<num;i++)
-            if(c.equals(coords[i])) return i;
+            if(c.equals(getCrd(i))) return i;
+        return -1;
+    }
+
+    public int searchWCrd(Coord c) {
+        for(int i=0;i<num;i++)
+            if(c.nearlyEquals(getWCrd(i))) return i;
         return -1;
     }
 

@@ -27,7 +27,7 @@ public class Pair {
     }
 
     public boolean equals(Pair p) {
-        return Tool.equals(this.dx,p.dy) && Tool.equals(this.dy,p.dy);
+        return Tool.equals(this.dx,p.dx) && Tool.equals(this.dy,p.dy);
     }
 
     public boolean nearlyEquals(Pair p) {

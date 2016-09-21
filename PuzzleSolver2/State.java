@@ -26,4 +26,8 @@ public class State {
     public State clone() {
         return new State(this);
     }
+
+    public String toString() {
+        return vector.toString() + "\t" + angle;
+    }
 }

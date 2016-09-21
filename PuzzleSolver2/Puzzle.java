@@ -75,6 +75,7 @@ public class Puzzle {
 
     //TODO
     public boolean isFinish() {
+        if(frame_list.size() == 0) return true;
         double sum = 0.0;
         for(Frame f : frame_list) sum += f.calcArea();
         if(sum <= 0.0) return true;

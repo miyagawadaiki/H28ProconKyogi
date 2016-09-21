@@ -44,19 +44,26 @@ public class Frame extends Piece implements Figure_interface {
         Piece clone = p.clone();
         clone.move(s);
         if(this.maxLength() < clone.maxLength()) return false;
+//                            System.out.println("\tf");
         if(this.calcArea() < clone.calcArea()) return false;
+//                            System.out.println("\to");
         if(!this.isInArea(clone)) return false;
-        return false;
+                            System.out.println("\to!");
+        return true;
     }
 
     public double evaluate(Piece p, State s, Coord join_crd) {
         double ret = 0.0;
         Piece clone = p.clone();
         clone.move(s);
+                            System.out.println("\t"+join_crd);
+                            System.out.println("\t"+clone.toStringForRead());
         int join_idx_f = this.searchCrd(join_crd);
-        int join_idx_p = p.searchCrd(join_crd);
+        int join_idx_p = clone.searchWCrd(join_crd);
+                            System.out.println("\t"+join_idx_f);
+                            System.out.println("\t"+join_idx_p);
 
-        if(Tool.equals(this.getAngle(join_idx_f),p.getAngle(join_idx_p)))
+        if(Tool.equals(this.getAngle(join_idx_f),clone.getAngle(join_idx_p)))
             ret += 1.0;
 
         return ret;
@@ -66,7 +73,7 @@ public class Frame extends Piece implements Figure_interface {
         ArrayList<Frame> ret = new ArrayList<Frame>();
         p_origin.move(s);
         int join_idx_f = this.searchCrd(join_crd);
-        int join_idx_p = p_origin.searchCrd(join_crd);
+        int join_idx_p = p_origin.searchWCrd(join_crd);
         ArrayList<Coord> list = new ArrayList<Coord>();
         for(Coord c : this.slice(getIdxN(join_idx_f),getIdxB(join_idx_f)))
             list.add(c);
@@ -98,7 +105,11 @@ public class Frame extends Piece implements Figure_interface {
             else {
                 list.add(0,head);
             }
-            idx_head = p_origin.getIdxN(idx_head);
+
+
+            if(idx_head == idx_tail) {
+                break;
+            }
 
 
             Coord tail = p_origin.getWCrd(idx_tail);
@@ -124,11 +135,20 @@ public class Frame extends Piece implements Figure_interface {
             else {
                 list.add(tail);
             }
-            idx_tail = p_origin.getIdxB(idx_tail);
 
-            if(idx_head == idx_tail || idx_head - idx_tail == 1) {
+            if(false) {
                 break;
             }
+
+            idx_head = p_origin.getIdxN(idx_head);
+            idx_tail = p_origin.getIdxB(idx_tail);
+        }
+        if(list.size() > 0) {
+            Coord[] array = new Coord[list.size()];
+            for(int i=0;i<list.size();i++) {
+                array[i] = list.get(i).clone();
+            }
+            ret.add(new Frame(array));
         }
 
         return ret;
@@ -142,12 +162,12 @@ public class Frame extends Piece implements Figure_interface {
     }
 
     public boolean isInArea(Piece p) {
-        for(Coord c : coords) {
-            if(this.isInArea(c) == false) return false;
+        for(int i=0;i<p.num;i++) {
+            if(this.isInArea(p.getWCrd(i)) == false) return false;
         }
         for(int i=0;i<this.num;i++) {
             for(int j=0;j<p.num;j++) {
-                if(this.getLine(i).isCross(p.getLine(j)) == true) return false;
+                if(this.getLine(i).isCross(p.getWLine(j)) == true) return false;
             }
         }
         return true;

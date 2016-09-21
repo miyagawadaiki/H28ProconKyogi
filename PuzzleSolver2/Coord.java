@@ -38,7 +38,7 @@ public class Coord extends Pair {
     }
 
     public Coord move(State state) {
-        return new Coord(new Coord(this,state.vector),state.angle);
+        return new Coord(new Coord(this,state.angle),state.vector);
     }
 
     public double dist() {
