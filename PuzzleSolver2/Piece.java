@@ -29,14 +29,23 @@ public class Piece extends Figure_framework implements Figure_interface {
 
     public Piece(Piece copy) {
         super(copy);
-        for(Triangle t : copy.triangles) this.triangles.add(t);
+        triangles = new ArrayList<Triangle>();
+        for(Triangle t : copy.triangles)
+            this.triangles.add(t);
     }
 
     public Piece clone() {
         return new Piece(this);
     }
 
-    //TODO
+    public void move(State state) {
+        super.move(state);
+        for(Triangle t : triangles)
+            t.move(state);
+    }
+
+        // ピースを三角形分割する
+        // コンストラクタを介した再帰関数になっている
     public void triangulate() {
 //        System.out.println(this);
         if(this.num == 3) {
@@ -98,6 +107,13 @@ public class Piece extends Figure_framework implements Figure_interface {
         return tmp;
     }
 
+    public int searchOnLine(Coord c) {
+        for(int i=0;i<num;i++) {
+            if(getWLine(i).isOnLine(c)) return i;
+        }
+        return -1;
+    }
+
     @Override
     public double calcArea() {
         double sum = 0.0;
@@ -109,8 +125,12 @@ public class Piece extends Figure_framework implements Figure_interface {
 
     @Override
     public void read(Scanner stdIn) {
-        for(int i=0;i<num;i++) {
-            coords[i] = new Coord(stdIn.nextDouble(), stdIn.nextDouble());
+        Coord c = new Coord(stdIn.nextDouble(), stdIn.nextDouble());
+        Vector v = c.toVector().reverse();
+        coords[0] = c.translate(v);
+        for(int i=1;i<num;i++) {
+            Coord crd = new Coord(stdIn.nextDouble(), stdIn.nextDouble());
+            coords[i] = crd.translate(v);
         }
         triangulate();
     }
@@ -137,6 +157,10 @@ public class Piece extends Figure_framework implements Figure_interface {
     @Override
     public String toStringForRead() {
         String t = "";
+        t += num + "\n";
+        for(int i=0;i<num;i++) {
+            t += getWCrd(i).toString() + "\n";
+        }
         return t;
     }
 

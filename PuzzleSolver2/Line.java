@@ -44,6 +44,37 @@ public class Line extends Vector {
         return Math.abs(a*x0 + b*y0 + c)/Math.sqrt(a*a + b*b);
     }
 
+    public boolean isOnLine(Coord c) {
+        Coord s = getSt(), g = getGo();
+        if(dx == 0) {
+            if(s.dx == c.dx) {
+                int t = (s.dy<g.dy)?1:-1;
+                return s.dy*t <= c.dy*t && c.dy*t <= g.dy*t;
+            }
+            return false;
+        }
+        else if(dy == 0) {
+            if(s.dy == c.dy) {
+                int t = (s.dy<g.dy)?1:-1;
+                return s.dx*t <= c.dx*t && c.dx*t <= g.dx*t;
+            }
+            return false;
+        }
+        else {
+            int tx = (s.dx<g.dx)?1:-1;
+            int ty = (s.dy<g.dy)?1:-1;
+            return (s.dx*tx <= c.dx*tx &&
+                    c.dx*tx <= g.dx*tx &&
+                    s.dy*ty <= c.dy*ty &&
+                    c.dy*ty <= g.dy*ty &&
+                    calcDist(c) == 0.0);
+        }
+    }
+
+    public boolean isOnLine(Line l) {
+        return isOnLine(l.getSt()) && isOnLine(l.getGo());
+    }
+
     public boolean isOnTheRight(Coord c) {
         if(this.dx == 0.0) {
             if(this.dy > 0) return c.dx <= st.dx;
@@ -64,6 +95,14 @@ public class Line extends Vector {
         boolean a = isOnTheRight(l.getSt());
         boolean b = isOnTheRight(l.getGo());
         return a ^ b;
+    }
+
+    public boolean equals(Line l) {
+        return super.equals((Vector)l) && this.st.equals(l.st);
+    }
+
+    public boolean nearlyEquals(Line l) {
+        return super.nearlyEquals((Vector)l) && this.st.nearlyEquals(l.st);
     }
 
     public String toString() {

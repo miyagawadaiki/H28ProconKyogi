@@ -3,6 +3,7 @@
 /////////////////////////////////////////////////////////////
 public class Tool {
 
+    static double threshold = 0.1;
         // 2つのベクトル間の角度をラジアンで返す
         // 範囲：0 ~ π
     static double calcCosAngle(Vector a, Vector b) {
@@ -46,6 +47,14 @@ public class Tool {
         double tmp = d + 0.00000000000005;
         long hoge = (long)(tmp * 10000000000000L);
         return hoge / 10000000000000.0;
+    }
+
+    static boolean equals(double a, double b) {
+        return a == b;
+    }
+
+    static boolean nearlyEquals(double a, double b) {
+        return Math.abs(a-b) <= threshold;
     }
 
 }

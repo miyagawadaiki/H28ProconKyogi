@@ -26,8 +26,13 @@ public class Pair {
         return new Pair(this);
     }
 
-    public boolean equals(Pair t) {
-        return this.dx == t.dx && this.dy == t.dy;
+    public boolean equals(Pair p) {
+        return Tool.equals(this.dx,p.dy) && Tool.equals(this.dy,p.dy);
+    }
+
+    public boolean nearlyEquals(Pair p) {
+        return Tool.nearlyEquals(Math.sqrt((this.dx-p.dx)*(this.dx-p.dx) + (this.dy-p.dy)*(this.dy-p.dy)),0.0);
+//        return Tool.nearlyEquals(this.dx,p.dx) && Tool.nearlyEquals(this.dy,p.dy);
     }
 
     public String toString() {

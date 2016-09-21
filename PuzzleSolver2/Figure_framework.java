@@ -13,56 +13,56 @@ import java.util.Scanner;
 public class Figure_framework implements Figure_interface {
     int num;
     Coord[] coords;
-    Vector ref;
-    double rev_ang;
+    State state;
 
     public Figure_framework(int num) {
         if(num < 3) throw new IllegalArgumentException("多角形ではありません:" + num);
         this.num = num;
         coords = new Coord[num];
         for(Coord c : coords) c = new Coord();
-        ref = new Vector();
-        rev_ang = 0.0;
+        state = new State();
     }
 
     public Figure_framework(Figure_framework copy) {
         this.num = copy.num;
         this.coords = copy.coords.clone();
-        this.ref = copy.ref.clone();
-        this.rev_ang = copy.rev_ang;
+        this.state = copy.state.clone();
     }
 
     public Figure_framework clone() {
         return new Figure_framework(this);
     }
 
-    public void translate(Vector v) {
-        ref = ref.plus(v);
-    }
-
-    public void rotate(double theta) {
-        rev_ang += theta;
-    }
-
-    public void move(Vector v, double theta) {
-        translate(v);
-        rotate(theta);
+    public void move(State state) {
+        this.state = state.clone();
     }
 
     public int getIdxB(int n) { return (n+num-1)%num; }
     public int getIdxN(int n) { return (n+1)%num; }
 
-    public Coord getCrd(int n) {  return new Coord(coords[n],rev_ang); }
-    public Coord getCrdB(int n) { return coords[getIdxB(n)]; }
-    public Coord getCrdN(int n) { return coords[getIdxN(n)]; }
+    public Coord getCrd(int n) {  return coords[n]; }
+    public Coord getCrdB(int n) { return getCrd(getIdxB(n)); }
+    public Coord getCrdN(int n) { return getCrd(getIdxN(n)); }
 
-    public Vector getVec(int n) {  return new Vector(new Vector(getCrd(n), getCrdN(n)),rev_ang); }
+    public Coord getWCrd(int n) {  return getCrd(n).move(state); }
+    public Coord getWCrdB(int n) { return getWCrd(getIdxB(n)); }
+    public Coord getWCrdN(int n) { return getWCrd(getIdxN(n)); }
+
+    public Vector getVec(int n) {  return new Vector(getCrd(n), getCrdN(n)); }
     public Vector getVecB(int n) { return getVec(getIdxB(n)); }
     public Vector getVecN(int n) { return getVec(getIdxN(n)); }
+
+    public Vector getWVec(int n) {  return getVec(n).move(state); }
+    public Vector getWVecB(int n) { return getWVec(getIdxB(n)); }
+    public Vector getWVecN(int n) { return getWVec(getIdxN(n)); }
 
     public Line getLine(int n) {  return new Line(getVec(n),getCrd(n)); }
     public Line getLineB(int n) { return getLine(getIdxB(n)); }
     public Line getLineN(int n) { return getLine(getIdxN(n)); }
+
+    public Line getWLine(int n) {  return new Line(getWVec(n),getWCrd(n)); }
+    public Line getWLineB(int n) { return getWLine(getIdxB(n)); }
+    public Line getWLineN(int n) { return getWLine(getIdxN(n)); }
 
     public double getAngle(int n) { return Tool.calcAngle(getVecB(n),getVec(n)); }
 
@@ -74,6 +74,20 @@ public class Figure_framework implements Figure_interface {
             if(c.dist() > max) max = c.dist();
         }
         return max;
+    }
+
+    public double allLength() {
+        double sum = 0.0;
+        for(int i=0;i<num;i++) {
+            sum += getVec(i).length();
+        }
+        return sum;
+    }
+
+    public int searchCrd(Coord c) {
+        for(int i=0;i<num;i++)
+            if(c.equals(coords[i])) return i;
+        return -1;
     }
 
     @Override

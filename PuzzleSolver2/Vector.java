@@ -24,6 +24,10 @@ public class Vector extends Pair {
         this.dy = v.dx * Math.sin(angle) + v.dy * Math.cos(angle);
     }
 
+    public Vector(Coord c) {
+        this(c.dx,c.dy);
+    }
+
     public Vector(Vector copy) {
         super(copy);
     }
@@ -31,6 +35,10 @@ public class Vector extends Pair {
     @Override
     public Vector clone() {
         return new Vector(this);
+    }
+
+    public Vector move(State state) {
+        return new Vector(plus(state.vector),state.angle);
     }
 
     public double length() {
@@ -47,5 +55,13 @@ public class Vector extends Pair {
 
     public Vector reverse() {
         return new Vector(-1 * this.dx, -1*this.dy);
+    }
+
+    public boolean equals(Vector v) {
+        return super.equals((Pair)v);
+    }
+
+    public boolean nearlyEquals(Vector v) {
+        return super.nearlyEquals((Pair)v);
     }
 }

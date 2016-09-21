@@ -25,6 +25,10 @@ public class Coord extends Pair {
         super(copy);
     }
 
+    public Vector toVector() {
+        return new Vector(this);
+    }
+
     public Coord clone() {
         return new Coord(this);
     }
@@ -33,7 +37,19 @@ public class Coord extends Pair {
         return new Coord(this,v);
     }
 
+    public Coord move(State state) {
+        return new Coord(new Coord(this,state.vector),state.angle);
+    }
+
     public double dist() {
         return Math.sqrt(dx*dx + dy*dy);
+    }
+
+    public boolean equals(Coord c) {
+        return super.equals((Pair)c);
+    }
+
+    public boolean nearlyEquals(Coord c) {
+        return super.nearlyEquals((Pair)c);
     }
 }

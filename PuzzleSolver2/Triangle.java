@@ -41,7 +41,7 @@ public class Triangle extends Figure_framework implements Figure_interface {
 
     public boolean isInArea(Coord c) {
         for(int i=0;i<3;i++) {
-            if((new Line(getVec(i),getCrd(i))).isOnTheRight(c) == false) return false;
+            if(getWLine(i).isOnTheRight(c) == false) return false;
         }
         return true;
     }
