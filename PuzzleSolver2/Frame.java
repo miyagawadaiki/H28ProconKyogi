@@ -121,7 +121,7 @@ public class Frame extends Piece implements Figure_interface {
                             list.remove(0);
                         }
                         shape(tmp);
-                                        System.out.print("\t\ttmp : ");
+                                        System.out.print("\t\ttmp cw\t: ");
                                         for(Coord c : tmp) System.out.print(c + "\t");
                                         System.out.println();
                         Coord[] array = new Coord[tmp.size()];
@@ -174,11 +174,8 @@ public class Frame extends Piece implements Figure_interface {
                             tmp.add(list.get(idx_div_list));
                             list.remove(idx_div_list);
                         }
-                                        System.out.print("\t\ttmp : ");
-                                        for(Coord c : tmp) System.out.print(c + "\t");
-                                        System.out.println();
                         shape(tmp);
-                                        System.out.print("\t\ttmps: ");
+                                        System.out.print("\t\ttmp ccw\t: ");
                                         for(Coord c : tmp) System.out.print(c + "\t");
                                         System.out.println();
                         Coord[] array = new Coord[tmp.size()];

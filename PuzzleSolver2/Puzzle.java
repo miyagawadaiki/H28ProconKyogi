@@ -74,7 +74,7 @@ public class Puzzle {
 
         n = stdIn.nextInt();
         for(int i=0;i<n;i++) {
-            piece_list.add(new Piece((int)stdIn.nextDouble()));
+            piece_list.add(new Piece((int)stdIn.nextDouble(),i));
             piece_list.get(i).read(stdIn);
         }
     }

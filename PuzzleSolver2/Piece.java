@@ -13,11 +13,17 @@ import java.util.Scanner;
 
 public class Piece extends Figure_framework implements Figure_interface {
     ArrayList<Triangle> triangles;
-//    int id;
+    int id;
 
     public Piece(int n) {
         super(n);
+        id = -1;
         triangles = new ArrayList<Triangle>(n-2);
+    }
+
+    public Piece(int n, int id) {
+        this(n);
+        this.id = id;
     }
 
     //TODO
@@ -29,6 +35,7 @@ public class Piece extends Figure_framework implements Figure_interface {
 
     public Piece(Piece copy) {
         super(copy);
+        this.id = copy.id;
         triangles = new ArrayList<Triangle>();
         for(Triangle t : copy.triangles)
             this.triangles.add(t);
@@ -157,7 +164,7 @@ public class Piece extends Figure_framework implements Figure_interface {
     @Override
     public String toStringForRead() {
         String t = "";
-        t += num + "\n";
+        t += num + "\t" + id + "\n";
         for(int i=0;i<num-1;i++) {
             t += getWCrd(i).toStringForRead() + "\n";
         }
