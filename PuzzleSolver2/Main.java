@@ -12,9 +12,12 @@ public class Main {
     public static void recursion(Puzzle puzzle) {
                                         System.out.println(puzzle);
         if(puzzle.isFinish()) {
+            System.out.println("#####################################");
             System.out.println("Finisssssshhhhhhh!!!!!!");
             System.out.println(puzzle.toStringForRead());
-            System.exit(0);
+            System.out.println("#####################################");
+//            System.exit(0);
+            System.out.println("\n\n\n\n\n\n");
         }
         for(int i=0;i<puzzle.frame_list.size();i++) {
             Frame f = puzzle.frame_list.get(i);
@@ -26,28 +29,26 @@ public class Main {
                         double angle = Tool.calcAngle(p.getVec(l),f.getVec(j));
                         Vector vector = f.getCrd(j).toVector().plus(new Vector(p.getCrd(l).toVector().reverse(),angle));
                         State state = new State(vector,angle);
-                                        System.out.println(state);
-                                        System.out.println(f.getCrd(j));
+//                                        System.out.println(state);
+//                                        System.out.println(f.getCrd(j));
                         if(!(f.canPut(p,state,f.getCrd(j)))) continue;
-                                        System.out.println("h");
+//                                        System.out.println("h");
                         if(f.evaluate(p,state,f.getCrd(j)) < 1.0) continue;
-                                        System.out.println("o");
-                        ArrayList<Frame> ret = f.put(p,state,f.getCrd(j));
-                        if(ret.size() == 0) continue;
-                                        System.out.println("ge");
-                        for(Frame ff : ret) {
-                                        System.out.println(ff);
-                            puzzle.frame_list.add(ff);
-                        }
-                        puzzle.frame_list.remove(i);
-                        puzzle.complete_list.add(p);
-                        puzzle.piece_list.remove(k);
-                        recursion(puzzle.clone());
+//                                        System.out.println("o");
+                        Puzzle clone = puzzle.clone();
+                        Frame cf = clone.frame_list.get(i);
+                        Piece cp = clone.piece_list.get(k);
+                        clone.addFrameList(cf.put(cp,state,cf.getCrd(j)));
+                        clone.frame_list.remove(i);
+                        clone.complete_list.add(cp);
+                        clone.piece_list.remove(k);
+                        recursion(clone);
                     }
                 }
             }
         }
         System.out.println("Not Found");
+        System.out.println(("\n\n\n------------------------------------\n\n\n"));
 //        System.exit(0);
     }
 
@@ -69,10 +70,11 @@ public class Main {
         System.out.println(f.isInArea(p));
         System.out.println(f.calcArea());
         System.out.println(Tool.calcAngle(new Vector(0.0,-3.0),new Vector(-1.0,0.0)));
-        Line line = new Line(new Coord(2.0,3.0),new Coord(0.0,3.0));
+        Line line = new Line(new Coord(0.0,2.0),new Coord(3.0,2.0));
         System.out.println(line);
         System.out.println(line.isOnTheRight(new Coord(1.0,2.0)));
-        System.out.println(line.isOnLine(new Coord(1.0,3.0)));
+        System.out.println(line.isOnLine(new Coord(2.0,2.0)));
+        System.out.println(line.calcDist(new Coord(3.0,1.0)));
         Triangle tri = new Triangle(new Coord(2.0,3.0),new Coord(0.0,3.0),new Coord(0.0,0.0));
         System.out.println(tri.isInArea(new Coord(1.0,2.0)));
 

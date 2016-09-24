@@ -158,9 +158,10 @@ public class Piece extends Figure_framework implements Figure_interface {
     public String toStringForRead() {
         String t = "";
         t += num + "\n";
-        for(int i=0;i<num;i++) {
-            t += getWCrd(i).toString() + "\n";
+        for(int i=0;i<num-1;i++) {
+            t += getWCrd(i).toStringForRead() + "\n";
         }
+        t += getWCrd(num-1).toStringForRead();
         return t;
     }
 

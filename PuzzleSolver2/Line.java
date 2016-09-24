@@ -37,7 +37,7 @@ public class Line extends Vector {
         if(dx == 0.0) return Math.abs(co.dy-this.dy);
         double a = -dy/dx;
         double b = 1.0;
-        double c = (dy/dx)*st.dx + st.dy;
+        double c = (dy/dx)*st.dx - st.dy;
         double x0 = co.dx;
         double y0 = co.dy;
 
@@ -55,7 +55,7 @@ public class Line extends Vector {
         }
         else if(dy == 0) {
             if(s.dy == c.dy) {
-                int t = (s.dy<g.dy)?1:-1;
+                int t = (s.dx<g.dx)?1:-1;
                 return s.dx*t <= c.dx*t && c.dx*t <= g.dx*t;
             }
             return false;
@@ -92,9 +92,13 @@ public class Line extends Vector {
     }
 
     public boolean isCross(Line l) {
+        if(isOnLine(l.getSt()) || isOnLine(l.getGo()) ||
+           l.isOnLine(getSt()) || l.isOnLine(getGo())) return false;
         boolean a = isOnTheRight(l.getSt());
         boolean b = isOnTheRight(l.getGo());
-        return a ^ b;
+        boolean c = l.isOnTheRight(this.getSt());
+        boolean d = l.isOnTheRight(this.getGo());
+        return (a ^ b) && (c ^ d);
     }
 
     public boolean equals(Line l) {

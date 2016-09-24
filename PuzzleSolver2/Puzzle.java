@@ -57,6 +57,12 @@ public class Puzzle {
     }
 */
 
+    public int getNumAll() {
+        int sum = 0;
+        for(Piece p : complete_list) sum += p.num;
+        return sum;
+    }
+
     public void read() {
         Scanner stdIn  = new Scanner(System.in);
 
@@ -83,6 +89,13 @@ public class Puzzle {
         return false;
     }
 
+    public void addFrameList(ArrayList<Frame> list) {
+        if(list.size() == 0) return;
+        for(Frame f : list) {
+            this.frame_list.add(f);
+        }
+    }
+
     //TODO
     @Override
     public String toString() {
@@ -103,7 +116,8 @@ public class Puzzle {
     //TODO
     public String toStringForRead() {
         String t = "";
-//        for(Frame f : frame_list) t += f.toStringForRead() + "\n";
+        t += getNumAll() + "\n";
+        t += complete_list.size() + "\n";
         for(Piece p : complete_list) t += p.toStringForRead() + "\n";
         return t;
     }

@@ -40,4 +40,10 @@ public class Pair {
         s += String.format("(%8.5f, %8.5f)", dx, dy);
         return s;
     }
+
+    public String toStringForRead() {
+        String s = "";
+        s += String.format("%8.5f\t%8.5f", dx, dy);
+        return s;
+    }
 }
