@@ -61,4 +61,36 @@ public class Tool {
         return Math.abs(a-b) <= threshold;
     }
 
+    static boolean largerThan(double a, double b) {
+        return a > b && !(equals(a,b));
+    }
+
+    static boolean smallerThan(double a, double b) {
+        return a < b && !(equals(a,b));
+    }
+
+    static boolean LTorE(double a, double b) {
+        return a > b && equals(a,b);
+    }
+
+    static boolean STorE(double a, double b) {
+        return a < b && equals(a,b);
+    }
+
+    static boolean nearlyLT(double a, double b) {
+        return a > b && !(nearlyEquals(a,b));
+    }
+
+    static boolean nearlyST(double a, double b) {
+        return a < b && !(nearlyEquals(a,b));
+    }
+
+    static boolean nearlyLTorE(double a, double b) {
+        return a > b && nearlyEquals(a,b);
+    }
+
+    static boolean nearlySTorE(double a, double b) {
+        return a < b && nearlyEquals(a,b);
+    }
+
 }

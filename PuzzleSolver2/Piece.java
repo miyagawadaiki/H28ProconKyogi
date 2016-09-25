@@ -31,6 +31,7 @@ public class Piece extends Figure_framework implements Figure_interface {
         this(tmp.length);
         coords = tmp.clone();
         triangulate();
+        System.out.println(this);
     }
 
     public Piece(Piece copy) {

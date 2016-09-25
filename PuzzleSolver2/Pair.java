@@ -26,6 +26,10 @@ public class Pair {
         return new Pair(this);
     }
 
+    public Pair around() {
+        return new Pair(Tool.round(dx),Tool.round(dy));
+    }
+
     public boolean equals(Pair p) {
         return Tool.equals(this.dx,p.dx) && Tool.equals(this.dy,p.dy);
     }

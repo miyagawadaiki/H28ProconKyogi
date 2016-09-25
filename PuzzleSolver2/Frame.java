@@ -48,7 +48,7 @@ public class Frame extends Piece implements Figure_interface {
         if(this.calcArea() < clone.calcArea()) return false;
 //                            System.out.println("\to");
         if(!this.isInArea(clone)) return false;
-                            System.out.println("\to!");
+//                            System.out.println("\to!");
         return true;
     }
 
@@ -56,12 +56,12 @@ public class Frame extends Piece implements Figure_interface {
         double ret = 0.0;
         Piece clone = p.clone();
         clone.move(s);
-                            System.out.println("\t"+join_crd);
-                            System.out.println("\t"+clone.toStringForRead());
+//                            System.out.println("\t"+join_crd);
+//                            System.out.println("\t"+clone.toStringForRead());
         int join_idx_f = this.searchCrd(join_crd);
         int join_idx_p = clone.searchWCrd(join_crd);
-                            System.out.println("\t"+join_idx_f);
-                            System.out.println("\t"+join_idx_p);
+//                            System.out.println("\t"+join_idx_f);
+//                            System.out.println("\t"+join_idx_p);
 
         if(Tool.equals(this.getAngle(join_idx_f),clone.getAngle(join_idx_p)))
             ret += 1.0;
@@ -70,7 +70,7 @@ public class Frame extends Piece implements Figure_interface {
     }
 
     public ArrayList<Frame> put(Piece p_origin, State s, Coord join_crd) {
-                                System.out.println(this.toStringForRead());
+//                                System.out.println(this.toStringForRead());
         ArrayList<Frame> ret = new ArrayList<Frame>();
         p_origin.move(s);
         int join_idx_f = this.searchCrd(join_crd);
@@ -80,19 +80,20 @@ public class Frame extends Piece implements Figure_interface {
             list.add(c);
         int idx_head = p_origin.getIdxN(join_idx_p);
 
-                                System.out.print("list  : ");
-                                for(Coord c : list) System.out.print(c + "\t");
-                                System.out.println();
+//                                System.out.print("list  : ");
+//                                for(Coord c : list) System.out.print(c + "\t");
+//                                System.out.println();
         for(int i=0;i<p_origin.num-1;i++,idx_head = p_origin.getIdxN(idx_head)) {
+//                                System.out.println(i + " " + (p_origin.num-1));
             Coord head = p_origin.getWCrd(idx_head);
 
             if(list.get(0).equals(head)) {}
             else {
                 list.add(0,head);
             }
-                                System.out.print("list1 : ");
-                                for(Coord c : list) System.out.print(c + "\t");
-                                System.out.println();
+//                                System.out.print("list1 : ");
+//                                for(Coord c : list) System.out.print(c + "\t");
+//                                System.out.println();
 
             int idx_div_list = -1;
             for(int j=1;j<list.size()-1;j++) {
@@ -112,9 +113,9 @@ public class Frame extends Piece implements Figure_interface {
                     list.remove(0);
                 }
                 shape(tmp);
-                                        System.out.print("\t\ttmp cw\t: ");
-                                        for(Coord c : tmp) System.out.print(c + "\t");
-                                        System.out.println();
+//                                        System.out.print("\t\ttmp cw\t: ");
+//                                        for(Coord c : tmp) System.out.print(c + "\t");
+//                                        System.out.println();
                 if(tmp.size() >= 3) {
                     Coord[] array = new Coord[tmp.size()];
                     for(int j=0;j<array.length;j++) {
@@ -123,9 +124,9 @@ public class Frame extends Piece implements Figure_interface {
                     ret.add(new Frame(array));
                 }
             }
-                                System.out.print("list2 : ");
-                                for(Coord c : list) System.out.print(c + "\t");
-                                System.out.println();
+//                                System.out.print("list2 : ");
+//                                for(Coord c : list) System.out.print(c + "\t");
+//                                System.out.println();
 
             if(searchCrd(head) >= 0 &&
                Tool.equals(getAngle(searchCrd(head)),p_origin.getAngle(idx_head)) &&
@@ -133,310 +134,28 @@ public class Frame extends Piece implements Figure_interface {
             {
                 list.remove(0);
             }
-                                System.out.print("list3 : ");
-                                for(Coord c : list) System.out.print(c + "\t");
-                                System.out.println("\n");
+//                                System.out.print("list3 : ");
+//                                for(Coord c : list) System.out.print(c + "\t");
+//                                System.out.println("\n");
         }
 
         if(list.size() >= 3) {
             shape(list);
+                                System.out.print("list  : ");
+                                for(Coord c : list) System.out.print(c + "\t");
+                                System.out.println("\n");
             Coord[] array = new Coord[list.size()];
             for(int i=0;i<array.length;i++) {
                 array[i] = list.get(i);
             }
             ret.add(new Frame(array));
+            System.out.println("hogehogehoge");
         }
 
         return ret;
     }
-/*
-    public ArrayList<Frame> put(Piece p_origin, State s, Coord join_crd) {
-        ArrayList<Frame> ret = new ArrayList<Frame>();
-        p_origin.move(s);
-        int join_idx_f = this.searchCrd(join_crd);
-        int join_idx_p = p_origin.searchWCrd(join_crd);
-        ArrayList<Coord> list = new ArrayList<Coord>();
-        for(Coord c : this.slice(getIdxN(join_idx_f),getIdxB(join_idx_f)))
-            list.add(c);
-        int idx_head = p_origin.getIdxN(join_idx_p);
-        int idx_tail = p_origin.getIdxB(join_idx_p);
-
-        while(true) {
-            Coord head = p_origin.getWCrd(idx_head);
-
-            if(list.get(0).equals(head)) {
-                if(Tool.equals(p_origin.getAngle(idx_head),getAngle(searchCrd(head)))) {
-                    for(int i=0;i<list.size();i++) {
-                        Coord c = list.get(i);
-                        if(c.equals(head)) {
-                            list.remove(i);
-                            break;
-                        }
-                    }
-                }
-            }
-            else {
-                list.add(0,head);
-
-                int idx_div_list = -1;
-                for(int i=1;i<list.size()-1;i++) {
-                    Coord now = list.get(i);
-                    Coord next = list.get(i+1);
-                    Line l = new Line(now,next);
-                    if(l.isOnLine(head)) {
-                        idx_div_list = i;
-                        break;
-                    }
-                }
-                if(idx_div_list >= 0) {
-                    ArrayList<Coord> tmp = new ArrayList<Coord>();
-                    for(int i=0;i<=idx_div_list;i++) {
-                        tmp.add(list.get(0));
-                        list.remove(0);
-                    }
-                    shape(tmp);
-                    Coord[] array = new Coord[tmp.size()];
-                    for(int i=0;i<array.length;i++) {
-                        array[i] = tmp.get(i);
-                    }
-                    ret.add(new Frame(array));
-                }
-            }
-
-
-            Coord tail = p_origin.getWCrd(idx_tail);
-
-            if(list.get(0).equals(tail)) {
-                shape(list);
-                if(list.size() > 1) {
-                    Coord[] array = new Coord[list.size()];
-                    for(int i=0;i<array.length;i++) {
-                        array[i] = list.get(i);
-                    }
-                    ret.add(new Frame(array));
-                }
-                break;
-            }
-
-            if(list.get(list.size()-1).equals(tail)) {
-                if(Tool.equals(p_origin.getAngle(idx_tail),getAngle(searchCrd(tail)))) {
-                    for(int i=0;i<list.size();i++) {
-                        Coord c = list.get(i);
-                        if(c.equals(tail)) {
-                            list.remove(i);
-                            break;
-                        }
-                    }
-                }
-            }
-            else {
-                list.add(tail);
-
-                int idx_div_list = -1;
-                for(int i=list.size()-2;i>=1;i--) {
-                    Coord now = list.get(i);
-                    Coord next = list.get(i-1);
-                    Line l = new Line(now,next);
-                    if(l.isOnLine(tail)) {
-                        idx_div_list = i;
-                        break;
-                    }
-                }
-                if(idx_div_list >= 0) {
-                    int size = list.size();
-                    ArrayList<Coord> tmp = new ArrayList<Coord>();
-                    for(int i=idx_div_list;i<size;i++) {
-                        tmp.add(list.get(idx_div_list));
-                        list.remove(idx_div_list);
-                    }
-                    shape(tmp);
-                    Coord[] array = new Coord[tmp.size()];
-                    for(int i=0;i<array.length;i++) {
-                        array[i] = tmp.get(i);
-                    }
-                    ret.add(new Frame(array));
-                }
-            }
-
-            int next_head = p_origin.getIdxN(idx_head);
-            int next_tail = p_origin.getIdxB(idx_tail);
-
-            if(idx_head == next_tail && idx_tail == next_head) {
-                shape(list);
-                if(list.size() > 1) {
-                    Coord[] array = new Coord[list.size()];
-                    for(int i=0;i<array.length;i++) {
-                        array[i] = list.get(i);
-                    }
-                    ret.add(new Frame(array));
-                }
-                break;
-            }
-
-            idx_head = next_head;
-            idx_tail = next_tail;
-        }
-
-        return ret;
-    }
-/*
-    public ArrayList<Frame> put(Piece p_origin, State s, Coord join_crd) {
-        ArrayList<Frame> ret = new ArrayList<Frame>();
-        p_origin.move(s);
-        int join_idx_f = this.searchCrd(join_crd);
-        int join_idx_p = p_origin.searchWCrd(join_crd);
-        ArrayList<Coord> list = new ArrayList<Coord>();
-        for(Coord c : this.slice(getIdxN(join_idx_f),getIdxB(join_idx_f)))
-            list.add(c);
-        int idx_head = p_origin.getIdxN(join_idx_p);
-        int idx_tail = p_origin.getIdxB(join_idx_p);
-
-        while(true) {
-                                System.out.print("list : ");
-                                for(Coord c : list) System.out.print(c + "\t");
-                                System.out.println();
-            Coord head = p_origin.getWCrd(idx_head);
-
-            if(list.get(0).equals(head)) {
-                if(Tool.equals(p_origin.getAngle(idx_head),getAngle(searchCrd(head)))) {
-                    if(idx_head == idx_tail) break;
-                    for(int i=0;i<list.size();i++) {
-                        Coord c = list.get(i);
-                        if(c.equals(head)) {
-                            list.remove(i);
-                            break;
-                        }
-                    }
-                }
-            }
-            else {
-                list.add(0,head);
-
-                if(searchOnLine(head) >= 0) {
-//                    int idx_line = searchOnLine(head);
-//                    Line l = new Line(getWLine(idx_line).getSt(),head);
-                    int idx_div_list = -1;
-                    for(int i=1;i<list.size()-1;i++) {
-                        Coord now = list.get(i);
-                        Coord next = list.get(i+1);
-                        Line l = new Line(now,next);
-                        if(l.isOnLine(head)) {
-                            idx_div_list = i;
-                            break;
-                        }
-                    }
-                    if(idx_div_list >= 0) {
-                        ArrayList<Coord> tmp = new ArrayList<Coord>();
-                        for(int i=0;i<=idx_div_list;i++) {
-                            tmp.add(list.get(0));
-                            list.remove(0);
-                        }
-                        shape(tmp);
-                                        System.out.print("\t\ttmp cw\t: ");
-                                        for(Coord c : tmp) System.out.print(c + "\t");
-                                        System.out.println();
-                        Coord[] array = new Coord[tmp.size()];
-                        for(int i=0;i<array.length;i++) {
-                            array[i] = tmp.get(i);
-                        }
-                        list.add(0,head);
-                        ret.add(new Frame(array));
-                    }
-                }
-            }
-
-                                        System.out.print("\tlist : ");
-                                        for(Coord c : list) System.out.print(c + "\t");
-                                        System.out.println();
-
-            Coord tail = p_origin.getWCrd(idx_tail);
-
-            if(list.get(list.size()-1).equals(tail)) {
-                if(Tool.equals(p_origin.getAngle(idx_tail),getAngle(searchCrd(tail)))) {
-                    for(int i=0;i<list.size();i++) {
-                        Coord c = list.get(i);
-                        if(c.equals(tail)) {
-                            list.remove(i);
-                            break;
-                        }
-                    }
-                }
-            }
-            else {
-                list.add(tail);
-
-                if(searchOnLine(tail) >= 0) {
-//                    int idx_line = searchOnLine(tail);
-//                    Line l = new Line(tail,getWLine(idx_line).getGo());
-                    int idx_div_list = -1;
-                    for(int i=list.size()-2;i>=1;i--) {
-                        Coord now = list.get(i);
-                        Coord next = list.get(i-1);
-                        Line l = new Line(now,next);
-                        if(l.isOnLine(tail)) {
-                            idx_div_list = i;
-                            break;
-                        }
-                    }
-                    if(idx_div_list >= 0) {
-                        int size = list.size();
-                        ArrayList<Coord> tmp = new ArrayList<Coord>();
-                        for(int i=idx_div_list;i<size;i++) {
-                            tmp.add(list.get(idx_div_list));
-                            list.remove(idx_div_list);
-                        }
-                        shape(tmp);
-                                        System.out.print("\t\ttmp ccw\t: ");
-                                        for(Coord c : tmp) System.out.print(c + "\t");
-                                        System.out.println();
-                        Coord[] array = new Coord[tmp.size()];
-                        for(int i=0;i<array.length;i++) {
-                            array[i] = tmp.get(i);
-                        }
-                        list.add(tail);
-                        ret.add(new Frame(array));
-                    }
-                }
-            }
-                                        System.out.print("\tlist : ");
-                                        for(Coord c : list) System.out.print(c + "\t");
-                                        System.out.println();
-
-            int next_head = p_origin.getIdxN(idx_head);
-            int next_tail = p_origin.getIdxB(idx_tail);
-
-            if(idx_head == idx_tail || (idx_head == next_tail && idx_tail == next_head)) {
-                                        System.out.print("list : ");
-                                        for(Coord c : list) System.out.print(c + "\t");
-                                        System.out.println();
-                shape(list);
-                                        System.out.print("list : ");
-                                        for(Coord c : list) System.out.print(c + "\t");
-                                        System.out.println();
-                if(list.size() > 1) {
-                    Coord[] array = new Coord[list.size()];
-                    for(int i=0;i<array.length;i++) {
-                        array[i] = list.get(i);
-                    }
-                    ret.add(new Frame(array));
-                }
-                break;
-            }
-
-            idx_head = p_origin.getIdxN(idx_head);
-            idx_tail = p_origin.getIdxB(idx_tail);
-        }
-
-        return ret;
-    }
-*/
 
     public void shape(ArrayList<Coord> list) {
-//        if(list.get(0).equals(list.get(list.size()-1))) {
-//            list.remove(list.size()-1);
-//                                System.out.println("shape-case1");
-//        }
-//        if(list.size() <= 1) return;
         for(int i=0;;) {
             int size = list.size();
             Coord s = list.get((i+size-1)%size);
@@ -445,8 +164,6 @@ public class Frame extends Piece implements Figure_interface {
             Line line = new Line(s,g);
             if(line.isOnLine(now) || now.equals(g)) {
                 list.remove(i);
-                                System.out.print("shape-case2");
-                                System.out.println(line + " " + now);
             }
             else i++;
             if(list.size() <= i) break;

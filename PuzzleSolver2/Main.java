@@ -7,16 +7,19 @@ public class Main {
         System.out.println(first);
 
         recursion(first);
+
+        System.out.println("Damedakore");
     }
 
     public static void recursion(Puzzle puzzle) {
-                                        System.out.println(puzzle);
+//                                        System.out.println(puzzle);
+                                        System.out.println(puzzle.toStringForRead());
         if(puzzle.isFinish()) {
             System.out.println("#####################################");
             System.out.println("Finisssssshhhhhhh!!!!!!");
             System.out.println(puzzle.toStringForRead());
             System.out.println("#####################################");
-//            System.exit(0);
+            System.exit(0);
             System.out.println("\n\n\n\n\n\n");
         }
         for(int i=0;i<puzzle.frame_list.size();i++) {
@@ -25,20 +28,28 @@ public class Main {
                 for(int k=0;k<puzzle.piece_list.size();k++) {
                     Piece p = puzzle.piece_list.get(k);
                     for(int l=0;l<p.num;l++) {
-                                        System.out.printf("%d%d%d%d\n",i,j,k,l);
+                                        System.out.printf("%2d %2d %2d %2d\n",i,j,k,l);
                         double angle = Tool.calcAngle(p.getVec(l),f.getVec(j));
                         Vector vector = f.getCrd(j).toVector().plus(new Vector(p.getCrd(l).toVector().reverse(),angle));
                         State state = new State(vector,angle);
 //                                        System.out.println(state);
 //                                        System.out.println(f.getCrd(j));
-                        if(!(f.canPut(p,state,f.getCrd(j)))) continue;
-//                                        System.out.println("h");
-                        if(f.evaluate(p,state,f.getCrd(j)) < 1.0) continue;
-//                                        System.out.println("o");
+                                        System.out.println("start canPut()");
+                        if(!(f.canPut(p,state,f.getCrd(j)))) {
+                                        System.out.println("end canPut()");
+                            continue;
+                        }
+                                        System.out.println("start evaluate()");
+                        if(f.evaluate(p,state,f.getCrd(j)) < 1.0) {
+                                        System.out.println("end evaluate()");
+                            continue;
+                        }
                         Puzzle clone = puzzle.clone();
                         Frame cf = clone.frame_list.get(i);
                         Piece cp = clone.piece_list.get(k);
+                                        System.out.println("start put()");
                         clone.addFrameList(cf.put(cp,state,cf.getCrd(j)));
+                                        System.out.println("end put()");
                         clone.frame_list.remove(i);
                         clone.complete_list.add(cp);
                         clone.piece_list.remove(k);
@@ -47,8 +58,8 @@ public class Main {
                 }
             }
         }
-        System.out.println("Not Found");
-        System.out.println(("\n\n\n------------------------------------\n\n\n"));
+//        System.out.println("Not Found");
+//        System.out.println(("\n\n\n------------------------------------\n\n\n"));
 //        System.exit(0);
     }
 
