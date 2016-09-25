@@ -49,8 +49,12 @@ public class Tool {
         return hoge / 10000000000000.0;
     }
 
+    static double round(double d) {
+        return ((int)((d+0.000005)*100000))/100000.0;
+    }
+
     static boolean equals(double a, double b) {
-        return a == b;
+        return round(a) == round(b);
     }
 
     static boolean nearlyEquals(double a, double b) {
