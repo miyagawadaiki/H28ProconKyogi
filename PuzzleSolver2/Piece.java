@@ -31,7 +31,7 @@ public class Piece extends Figure_framework implements Figure_interface {
         this(tmp.length);
         coords = tmp.clone();
         triangulate();
-        System.out.println(this);
+//                                    System.out.println(this);
     }
 
     public Piece(Piece copy) {
@@ -71,7 +71,8 @@ public class Piece extends Figure_framework implements Figure_interface {
             for(int i=0;i<num-3;i++,idx = getIdxN(idx)) {
                 if(tri.isInArea(getCrd(idx)) == true) {
                     double t = line.calcDist(getCrd(idx));
-                    if(t > max) {
+                    if(Tool.largerThan(t,max)) {
+//                    if(t > max) {
                         max = t;
                         max_idx = idx;
                     }

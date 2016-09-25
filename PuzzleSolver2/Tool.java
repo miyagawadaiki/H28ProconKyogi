@@ -70,11 +70,11 @@ public class Tool {
     }
 
     static boolean LTorE(double a, double b) {
-        return a > b && equals(a,b);
+        return a > b || equals(a,b);
     }
 
     static boolean STorE(double a, double b) {
-        return a < b && equals(a,b);
+        return a < b || equals(a,b);
     }
 
     static boolean nearlyLT(double a, double b) {
@@ -86,11 +86,11 @@ public class Tool {
     }
 
     static boolean nearlyLTorE(double a, double b) {
-        return a > b && nearlyEquals(a,b);
+        return a > b || nearlyEquals(a,b);
     }
 
     static boolean nearlySTorE(double a, double b) {
-        return a < b && nearlyEquals(a,b);
+        return a < b || nearlyEquals(a,b);
     }
 
 }

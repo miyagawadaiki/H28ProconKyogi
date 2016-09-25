@@ -34,22 +34,22 @@ public class Main {
                         State state = new State(vector,angle);
 //                                        System.out.println(state);
 //                                        System.out.println(f.getCrd(j));
-                                        System.out.println("start canPut()");
+//                                        System.out.println("start canPut()");
                         if(!(f.canPut(p,state,f.getCrd(j)))) {
-                                        System.out.println("end canPut()");
+//                                        System.out.println("end canPut()");
                             continue;
                         }
-                                        System.out.println("start evaluate()");
+//                                        System.out.println("start evaluate()");
                         if(f.evaluate(p,state,f.getCrd(j)) < 1.0) {
-                                        System.out.println("end evaluate()");
+//                                        System.out.println("end evaluate()");
                             continue;
                         }
                         Puzzle clone = puzzle.clone();
                         Frame cf = clone.frame_list.get(i);
                         Piece cp = clone.piece_list.get(k);
-                                        System.out.println("start put()");
+//                                        System.out.println("start put()");
                         clone.addFrameList(cf.put(cp,state,cf.getCrd(j)));
-                                        System.out.println("end put()");
+//                                        System.out.println("end put()");
                         clone.frame_list.remove(i);
                         clone.complete_list.add(cp);
                         clone.piece_list.remove(k);

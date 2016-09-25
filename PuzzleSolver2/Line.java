@@ -47,27 +47,40 @@ public class Line extends Vector {
     public boolean isOnLine(Coord c) {
         Coord s = getSt(), g = getGo();
         if(dx == 0) {
-            if(s.dx == c.dx) {
-                int t = (s.dy<g.dy)?1:-1;
-                return s.dy*t <= c.dy*t && c.dy*t <= g.dy*t;
+            if(Tool.equals(s.dx,c.dx)) {
+//            if(s.dx == c.dx) {
+                int t = (Tool.smallerThan(s.dy,g.dy))?1:-1;
+//                int t = (s.dy<g.dy)?1:-1;
+                return Tool.STorE(s.dy*t,c.dy*t) && Tool.STorE(c.dy*t,g.dy*t);
+//                return s.dy*t <= c.dy*t && c.dy*t <= g.dy*t;
             }
             return false;
         }
         else if(dy == 0) {
-            if(s.dy == c.dy) {
-                int t = (s.dx<g.dx)?1:-1;
-                return s.dx*t <= c.dx*t && c.dx*t <= g.dx*t;
+            if(Tool.equals(s.dy,c.dy)) {
+//            if(s.dy == c.dy) {
+                int t = (Tool.smallerThan(s.dx,g.dx))?1:-1;
+//                int t = (s.dx<g.dx)?1:-1;
+                return Tool.STorE(s.dx*t,c.dx*t) && Tool.STorE(c.dx*t,g.dx*t);
+//                return s.dx*t <= c.dx*t && c.dx*t <= g.dx*t;
             }
             return false;
         }
         else {
-            int tx = (s.dx<g.dx)?1:-1;
-            int ty = (s.dy<g.dy)?1:-1;
-            return (s.dx*tx <= c.dx*tx &&
-                    c.dx*tx <= g.dx*tx &&
-                    s.dy*ty <= c.dy*ty &&
-                    c.dy*ty <= g.dy*ty &&
-                    calcDist(c) == 0.0);
+            int tx = (Tool.smallerThan(s.dx,g.dx))?1:-1;
+//            int tx = (s.dx<g.dx)?1:-1;
+            int ty = (Tool.smallerThan(s.dy,g.dy))?1:-1;
+//            int ty = (s.dy<g.dy)?1:-1;
+            return (Tool.STorE(s.dx*tx,c.dx*tx) &&
+//            return (s.dx*tx <= c.dx*tx &&
+                    Tool.STorE(c.dx*tx,g.dx*tx) &&
+//                    c.dx*tx <= g.dx*tx &&
+                    Tool.STorE(s.dy*ty,c.dy*ty) &&
+//                    s.dy*ty <= c.dy*ty &&
+                    Tool.STorE(c.dy*ty,g.dy*ty) &&
+//                    c.dy*ty <= g.dy*ty &&
+                    Tool.equals(calcDist(c),0.0));
+//                    calcDist(c) == 0.0);
         }
     }
 
@@ -77,17 +90,23 @@ public class Line extends Vector {
 
     public boolean isOnTheRight(Coord c) {
         if(this.dx == 0.0) {
-            if(this.dy > 0) return c.dx <= st.dx;
-            else return c.dx >= st.dx;
+            if(this.dy > 0) return Tool.STorE(c.dx,st.dx);
+//            if(this.dy > 0) return c.dx <= st.dx;
+            else return Tool.LTorE(c.dx,st.dx);
+//            else return c.dx >= st.dx;
         }
         else if(this.dy == 0.0) {
-            if(this.dx > 0) return c.dy >= st.dy;
-            else return c.dy <= st.dy;
+            if(this.dx > 0) return Tool.LTorE(c.dy,st.dy);
+//            if(this.dx > 0) return c.dy >= st.dy;
+            else return Tool.STorE(c.dy,st.dy);
+//            else return c.dy <= st.dy;
         }
         else {
             double y = (this.dy/this.dx)*(c.dx-st.dx) + st.dy;
-            if(this.dx > 0) return y <= c.dy;
-            else return y >= c.dy;
+            if(this.dx > 0) return Tool.STorE(y,c.dy);
+//            if(this.dx > 0) return y <= c.dy;
+            else return Tool.LTorE(y,c.dy);
+//            else return y >= c.dy;
         }
     }
 

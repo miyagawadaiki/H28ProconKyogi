@@ -31,32 +31,6 @@ public class Puzzle {
         return new Puzzle(this);
     }
 
-/*
-    public boolean execute() {
-        for(int i=0;i<frame_list.size();i++) {
-            Frame f = frame_list.get(i);
-            for(int j=0;j<f.num;j++) {
-                for(int k=0;k<piece_list.size();k++) {
-                    Piece p = piece_list.get(k);
-                    for(int l=0;l<p.num;l++) {
-                        State state = new State(f.getCrd(i),Tool.calcAngle(p.getVec(j),f.getVec(i)));
-                        if(!(f.canPut(p,state,f.getCrd(i)))) break;
-                        if(f.evaluate(p,state,f.getCrd(i)) < 1.0) break;
-                        for(Frame ff : f.put(p,state,f.getCrd(i))) {
-                            frame_list.add(ff);
-                        }
-                        frame_list.remove(i);
-                        complete_list.add(p);
-                        piece_list.remove(k);
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
-*/
-
     public int getNumAll() {
         int sum = 0;
         for(Piece p : complete_list) sum += p.num;
@@ -84,7 +58,8 @@ public class Puzzle {
         if(frame_list.size() == 0) return true;
         double sum = 0.0;
         for(Frame f : frame_list) sum += f.calcArea();
-        if(sum <= 0.0) return true;
+        if(Tool.equals(sum,0.0)) return true;
+//        if(sum <= 0.0) return true;
         if(piece_list.size() == 0) return true;
         return false;
     }

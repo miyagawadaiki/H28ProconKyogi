@@ -71,7 +71,8 @@ public class Figure_framework implements Figure_interface {
     public double maxLength() {
         double max = 0.0;
         for(Coord c : coords) {
-            if(c.dist() > max) max = c.dist();
+            if(Tool.largerThan(c.dist(),max)) max = c.dist();
+//            if(c.dist() > max) max = c.dist();
         }
         return max;
     }
@@ -92,7 +93,7 @@ public class Figure_framework implements Figure_interface {
 
     public int searchWCrd(Coord c) {
         for(int i=0;i<num;i++)
-            if(c.nearlyEquals(getWCrd(i))) return i;
+            if(c.equals(getWCrd(i))) return i;
         return -1;
     }
 
