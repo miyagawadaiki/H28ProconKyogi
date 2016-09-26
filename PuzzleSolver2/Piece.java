@@ -71,7 +71,7 @@ public class Piece extends Figure_framework implements Figure_interface {
             for(int i=0;i<num-3;i++,idx = getIdxN(idx)) {
                 if(tri.isInArea(getCrd(idx)) == true) {
                     double t = line.calcDist(getCrd(idx));
-                    if(Tool.largerThan(t,max)) {
+                    if(Tool.nearlyLT(t,max)) {
 //                    if(t > max) {
                         max = t;
                         max_idx = idx;

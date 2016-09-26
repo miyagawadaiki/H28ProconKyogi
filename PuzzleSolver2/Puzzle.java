@@ -42,13 +42,15 @@ public class Puzzle {
 
         int n = stdIn.nextInt();
         for(int i=0;i<n;i++) {
+            int id = stdIn.nextInt();
             frame_list.add(new Frame((int)stdIn.nextDouble()));
             frame_list.get(i).read(stdIn);
         }
 
         n = stdIn.nextInt();
         for(int i=0;i<n;i++) {
-            piece_list.add(new Piece((int)stdIn.nextDouble(),i));
+            int id = stdIn.nextInt();
+            piece_list.add(new Piece((int)stdIn.nextDouble(),id));
             piece_list.get(i).read(stdIn);
         }
     }
@@ -58,7 +60,7 @@ public class Puzzle {
         if(frame_list.size() == 0) return true;
         double sum = 0.0;
         for(Frame f : frame_list) sum += f.calcArea();
-        if(Tool.equals(sum,0.0)) return true;
+        if(Tool.nearlyEquals(sum,0.0)) return true;
 //        if(sum <= 0.0) return true;
         if(piece_list.size() == 0) return true;
         return false;
@@ -103,6 +105,13 @@ public class Puzzle {
         for(Frame f : frame_list) t += f.toStringByTriangle() +"\n";
         t += "<Piece:" + piece_list.size() + ">\n";
         for(Piece p : piece_list) t += p.toStringByTriangle() + "\n";
+        return t;
+    }
+
+    public String toStringStatus() {
+        String t = "";
+        for(int i=0;i<complete_list.size();i++) t += "*";
+        for(int i=0;i<piece_list.size();i++) t += "-";
         return t;
     }
 }

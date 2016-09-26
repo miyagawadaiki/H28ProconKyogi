@@ -3,7 +3,7 @@
 /////////////////////////////////////////////////////////////
 public class Tool {
 
-    static double threshold = 0.1;
+    static double threshold = 0.01;
         // 2つのベクトル間の角度をラジアンで返す
         // 範囲：0 ~ π
     static double calcCosAngle(Vector a, Vector b) {

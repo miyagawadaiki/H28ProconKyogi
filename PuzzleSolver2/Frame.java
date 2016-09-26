@@ -43,10 +43,10 @@ public class Frame extends Piece implements Figure_interface {
     public boolean canPut(Piece p, State s, Coord join_crd) {
         Piece clone = p.clone();
         clone.move(s);
-        if(Tool.smallerThan(this.maxLength(),clone.maxLength())) return false;
+        if(Tool.nearlyST(this.maxLength(),clone.maxLength())) return false;
 //        if(this.maxLength() < clone.maxLength()) return false;
 //                            System.out.println("\tf");
-        if(Tool.smallerThan(this.calcArea(),clone.calcArea())) return false;
+        if(Tool.nearlyST(this.calcArea(),clone.calcArea())) return false;
 //        if(this.calcArea() < clone.calcArea()) return false;
 //                            System.out.println("\to");
         if(!this.isInArea(clone)) return false;
@@ -65,7 +65,7 @@ public class Frame extends Piece implements Figure_interface {
 //                            System.out.println("\t"+join_idx_f);
 //                            System.out.println("\t"+join_idx_p);
 
-        if(Tool.equals(this.getAngle(join_idx_f),clone.getAngle(join_idx_p)))
+        if(Tool.nearlyEquals(this.getAngle(join_idx_f),clone.getAngle(join_idx_p)))
             ret += 1.0;
 
         return ret;
@@ -75,7 +75,7 @@ public class Frame extends Piece implements Figure_interface {
 //                                System.out.println(this.toStringForRead());
         ArrayList<Frame> ret = new ArrayList<Frame>();
         p_origin.move(s);
-                                System.out.println(p_origin.toStringForRead());
+//                                System.out.println(p_origin.toStringForRead());
         int join_idx_f = this.searchCrd(join_crd);
         int join_idx_p = p_origin.searchWCrd(join_crd);
         ArrayList<Coord> list = new ArrayList<Coord>();
@@ -83,21 +83,17 @@ public class Frame extends Piece implements Figure_interface {
             list.add(c);
         int idx_head = p_origin.getIdxN(join_idx_p);
 
-                                System.out.print("list  : ");
-                                for(Coord c : list) System.out.print(c + "\t");
-                                System.out.println();
+//                                System.out.print("list  : ");for(Coord c : list) System.out.print(c + "\t");System.out.println();
         for(int i=0;i<p_origin.num-1;i++,idx_head = p_origin.getIdxN(idx_head)) {
-                                System.out.println(i + " " + (p_origin.num-1));
+//                                System.out.println(i + " " + (p_origin.num-1));
             Coord head = p_origin.getWCrd(idx_head);
-                                System.out.println("head : " + head);
+//                                System.out.println("head : " + head);
 
-            if(list.get(0).equals(head)) {}
+            if(list.get(0).nearlyEquals(head)) {}
             else {
                 list.add(0,head);
             }
-                                System.out.print("list1 : ");
-                                for(Coord c : list) System.out.print(c + "\t");
-                                System.out.println();
+//                                System.out.print("list1 : ");for(Coord c : list) System.out.print(c + "\t");System.out.println();
 
             int idx_div_list = -1;
             for(int j=1;j<list.size()-1;j++) {
@@ -117,9 +113,7 @@ public class Frame extends Piece implements Figure_interface {
                     list.remove(0);
                 }
                 shape(tmp);
-                                        System.out.print("\t\ttmp cw\t: ");
-                                        for(Coord c : tmp) System.out.print(c + "\t");
-                                        System.out.println();
+//                                        System.out.print("\t\ttmp cw\t: ");for(Coord c : tmp) System.out.print(c + "\t");System.out.println();
                 if(tmp.size() >= 3) {
                     Coord[] array = new Coord[tmp.size()];
                     for(int j=0;j<array.length;j++) {
@@ -127,35 +121,36 @@ public class Frame extends Piece implements Figure_interface {
                     }
                     ret.add(new Frame(array));
                 }
+
+                Frame f = ret.get(ret.size()-1);
+
+                if(searchCrd(head) >= 0) {}
+                else if(Tool.nearlyEquals((f.getAngle(f.searchWCrd(head)) + p_origin.getAngle(idx_head)),Math.PI)) {}
+                else list.add(0,head);
             }
-                                System.out.print("list2 : ");
-                                for(Coord c : list) System.out.print(c + "\t");
-                                System.out.println();
+//                                System.out.print("list2 : ");for(Coord c : list) System.out.print(c + "\t");System.out.println();
 
             if(searchCrd(head) >= 0 &&
-               Tool.equals(getAngle(searchCrd(head)),p_origin.getAngle(idx_head)) &&
-               Tool.equals(Tool.calcTheta(getWVec(searchCrd(head))),Tool.calcTheta(p_origin.getWVec(idx_head))))
+               Tool.nearlyEquals(getAngle(searchCrd(head)),p_origin.getAngle(idx_head)) &&
+               Tool.nearlyEquals(Tool.calcTheta(getWVec(searchCrd(head))),Tool.calcTheta(p_origin.getWVec(idx_head))))
             {
                 list.remove(0);
             }
-                                System.out.print("list3 : ");
-                                for(Coord c : list) System.out.print(c + "\t");
-                                System.out.println("\n");
+//                                System.out.print("list3 : ");for(Coord c : list) System.out.print(c + "\t");System.out.println("\n");
         }
 
         if(list.size() >= 3) {
             shape(list);
-                                System.out.print("list4 : ");
-                                for(Coord c : list) System.out.print(c + "\t");
-                                System.out.println("\n");
+//                                System.out.print("list4 : ");for(Coord c : list) System.out.print(c + "\t");System.out.println("\n");
             Coord[] array = new Coord[list.size()];
             for(int i=0;i<array.length;i++) {
                 array[i] = list.get(i);
             }
             ret.add(new Frame(array));
-            System.out.println("hogehogehoge");
+//            System.out.println("hogehogehoge");
         }
 
+//                                System.out.println("ret.size() = " + ret.size());
         return ret;
     }
 
@@ -166,7 +161,7 @@ public class Frame extends Piece implements Figure_interface {
             Coord g = list.get((i+1)%size);
             Coord now = list.get(i);
             Line line = new Line(s,g);
-            if(line.isOnLine(now) || now.equals(g)) {
+            if(line.isOnLine(now) || now.nearlyEquals(g)) {
                 list.remove(i);
             }
             else i++;

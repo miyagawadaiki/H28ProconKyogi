@@ -13,7 +13,8 @@ public class Main {
 
     public static void recursion(Puzzle puzzle) {
 //                                        System.out.println(puzzle);
-                                        System.out.println(puzzle.toStringForRead());
+//                                        System.out.println(puzzle.toStringForRead());
+                                        System.out.println(puzzle.toStringStatus());
         if(puzzle.isFinish()) {
             System.out.println("#####################################");
             System.out.println("Finisssssshhhhhhh!!!!!!");
@@ -28,7 +29,7 @@ public class Main {
                 for(int k=0;k<puzzle.piece_list.size();k++) {
                     Piece p = puzzle.piece_list.get(k);
                     for(int l=0;l<p.num;l++) {
-                                        System.out.printf("%2d %2d %2d %2d\n",i,j,k,l);
+//                                        System.out.printf("%2d %2d %2d %2d\n",i,j,k,l);
                         double angle = Tool.calcAngle(p.getVec(l),f.getVec(j));
                         Vector vector = f.getCrd(j).toVector().plus(new Vector(p.getCrd(l).toVector().reverse(),angle));
                         State state = new State(vector,angle);
